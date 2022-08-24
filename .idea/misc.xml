@@ -3,8 +3,39 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/activity_change_email.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/activity_change_name_setttings.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/activity_driver_maps.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/activity_login.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/activity_otpverifacation.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/activity_password_change.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/activity_perform_login.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/activity_ride_history_preview.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/activity_signup.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/askuserpick_layout_popup.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/fragment_complain_fragment.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/fragment_contactus_fragment.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/fragment_driver_info_fragment.xml" value="0.24166666666666667" />
         <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/fragment_home_fragment.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/fragment_notifications.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/fragment_onboard_fragment1.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/fragment_onboarding_fragment2.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/fragment_onboarding_fragment3.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/fragment_onboarding_fragment4.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/fragment_onboarding_fragment5.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/fragment_playmusic_fragment.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/fragment_ride_details_fragment.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/fragment_ride_location_fragment.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/fragment_rides_history.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/fragment_settings_fragment.xml" value="0.24166666666666667" />
         <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/home_activity.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/navbar_head.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/navigation_menu.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/navitem_design.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/no_internet_dialogue.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/no_location_dialogue.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/ride_details_layout_test.xml" value="0.24166666666666667" />
+        <entry key="..\:/college/term 7/car pooling/app/src/main/res/layout/ridehistory_item_layout.xml" value="0.24166666666666667" />
       </map>
     </option>
   </component>

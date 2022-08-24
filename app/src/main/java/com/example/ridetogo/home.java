@@ -109,9 +109,6 @@ location_listener location_listener=new location_listener();
             nav_list.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
             nav_list.setAdapter(adapter);
            adapter.setSelected(frag_home);
-
-
-
     }
 
     private int[] getnavicons() {
@@ -139,7 +136,6 @@ location_listener location_listener=new location_listener();
         titles[6]="";
         titles[7]="Complain";
         titles[8]="Contact Us";
-
         return titles;
     }
     private navitem nav(int counter){
