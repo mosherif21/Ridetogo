@@ -254,8 +254,6 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback,Google
         btn_ride_details.setFocusable(false);
         btn_ride_details.setBackgroundColor(Color.parseColor("#7A7979"));
         userid= FirebaseAuth.getInstance().getCurrentUser().getUid();
-        check_made_Request();
-        check_ongoing_request();
         return v;
     }
    public boolean first_back=false;
@@ -318,6 +316,8 @@ location_Request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 if(ActivityCompat.checkSelfPermission((getActivity()),Manifest.permission.ACCESS_FINE_LOCATION)!=PackageManager.PERMISSION_GRANTED&&ActivityCompat.checkSelfPermission((getActivity()),Manifest.permission.ACCESS_COARSE_LOCATION)!=PackageManager.PERMISSION_GRANTED)
 return;
     LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient,location_Request,this);
+        check_made_Request();
+        check_ongoing_request();
     }
 
     @Override
@@ -772,6 +772,7 @@ private void getdriverAskPick(String driverid){
         driver_loc_marker.remove();
         chosen_destination_marker=mymap.addMarker(new MarkerOptions().position((destination_location_latlng)).title(destination_of_ride_request_chosen_name));
         routePickupOrpickuppoint=3;
+        FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders").child(userid).child("ongoingRide").setValue(FoundDriver_uid);
       getRouteToMarker2(destination_location_latlng);
         btn_call_help.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -970,7 +971,6 @@ private void getdriverAskPick(String driverid){
                 FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("DriversWorking").child(FoundDriver_uid).setValue(null);
                 FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("pickRequest").child(FoundDriver_uid).setValue(null);
                 FoundDriver_uid=null;
-
             }
             if(driver_ref!=null&&driver_listener!=null)
                 driver_ref.removeEventListener(driver_listener);
