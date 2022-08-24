@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "91232676272",
+    "firebase_url": "https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "ridetogo-dcf8e",
+    "storage_bucket": "ridetogo-dcf8e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:91232676272:android:ce65b5e2cf75bd72a58e75",
+        "android_client_info": {
+          "package_name": "com.example.ridetogo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "91232676272-krl8rcarionm7btuhovnih01645odt99.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ridetogo",
+            "certificate_hash": "e6095e8b159d8540644740916dbade8d27061c3b"
+          }
+        },
+        {
+          "client_id": "91232676272-v4hnifdsphdtsqfjeveva69ge5q9lfb4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBq-7c5wQ74vM4Tu_ChpAY6KhthmX2YuJY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "91232676272-v4hnifdsphdtsqfjeveva69ge5q9lfb4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

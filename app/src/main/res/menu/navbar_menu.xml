@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="General">
+        <menu>
+        <group android:checkableBehavior="single">
+    <item
+        android:id="@+id/navitem_rides_history"
+        android:title="Rides history"
+        android:icon="@drawable/ride_history"
+    />
+    <item
+        android:id="@+id/navitem_notifications"
+        android:title="Notifications"
+        android:icon="@drawable/notifications_icon"
+    />
+    <item
+        android:id="@+id/navitem_settings"
+        android:title="Settings and profile"
+        android:icon="@drawable/settings_icon"
+    />
+    <item
+        android:id="@+id/navitem_play_music"
+        android:title="Play some music"
+        android:icon="@drawable/music_icon"
+    />
+    <item
+        android:id="@+id/navitem_signout"
+        android:title="Sign out"
+        android:icon="@drawable/signout_icon"
+    />
+</group>
+
+        </menu>
+
+    </item>
+        <item
+            android:title="Help">
+            <menu>  <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/navitem_complain"
+                    android:title="Complain"
+                    android:icon="@drawable/complain_icon"
+                    />
+                <item
+                    android:id="@+id/navitem_contactus"
+                    android:title="Contact us"
+                    android:icon="@drawable/contactus_icon"
+                    />
+            </group>
+            </menu>
+
+            </item>
+
+</menu>

@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Ridetogo</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="skip">SKIP</string>
+    <string name="navigation_open">Open drawer</string>
+    <string name="navigation_close">Close drawer</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_driver_maps">driver_MapsActivity</string>
+
+</resources>

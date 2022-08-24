@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".driver_MapsActivity">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline62"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#E4E0E0"
+        android:orientation="horizontal"
+        map:layout_constraintGuide_percent="0.09" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline61"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#E4E0E0"
+        android:orientation="horizontal"
+        map:layout_constraintGuide_percent="0.03" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/myloc_Sd"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentStart="true"
+        android:clickable="true"
+        map:cardCornerRadius="10dp"
+        map:cardElevation="5dp"
+        map:layout_constraintBottom_toTopOf="@+id/guideline62"
+        map:layout_constraintDimensionRatio="1:1"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintHorizontal_bias="1.0"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintTop_toTopOf="@+id/guideline61">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/locicon222"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="2dp"
+            map:lottie_autoPlay="true"
+            map:lottie_loop="true"
+            map:lottie_rawRes="@raw/gpsicon" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline51"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        map:layout_constraintGuide_percent="0.83" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_onGoing_ride_driver"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/custom_circle_3"
+        android:elevation="2dp"
+        map:layout_constraintBottom_toBottomOf="parent"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintTop_toTopOf="@+id/guideline51">
+
+        <Button
+            android:id="@+id/btn_end_ride_inDriver"
+            android:layout_width="349dp"
+            android:layout_height="65dp"
+            android:background="@drawable/driver_activity_map_button_layout"
+            android:text="End Ride"
+            android:textColor="#FFFFFF"
+            map:layout_constraintBottom_toBottomOf="parent"
+            map:layout_constraintDimensionRatio="6:1"
+            map:layout_constraintEnd_toEndOf="parent"
+            map:layout_constraintStart_toStartOf="parent"
+            map:layout_constraintTop_toTopOf="parent"
+            map:layout_constraintVertical_bias="0.49" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline68"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+
+            map:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline67"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+
+            map:layout_constraintGuide_percent="0.95" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline65"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        map:layout_constraintGuide_percent="0.6" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/customer_assigned_info"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/custom_circle_3"
+        android:elevation="2dp"
+        android:visibility="invisible"
+        map:layout_constraintBottom_toBottomOf="parent"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintTop_toTopOf="@+id/guideline65"
+        tools:visibility="visible">
+
+        <Button
+            android:id="@+id/btn_pick_customer"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:background="@drawable/driver_activity_map_button_layout"
+            android:text="Pick customer"
+            android:textColor="#FFFFFF"
+            map:layout_constraintBottom_toBottomOf="parent"
+            map:layout_constraintEnd_toEndOf="parent"
+            map:layout_constraintHorizontal_bias="1.0"
+            map:layout_constraintStart_toStartOf="parent"
+            map:layout_constraintTop_toTopOf="@+id/guideline63"
+            map:layout_constraintVertical_bias="0.13999999" />
+
+        <Button
+            android:id="@+id/btn_cancel_customer_request_indriver"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:background="@drawable/driver_activity_map_button_layout"
+            android:text="cancel request"
+            android:textColor="#FFFFFF"
+            map:layout_constraintBottom_toBottomOf="parent"
+            map:layout_constraintEnd_toEndOf="parent"
+            map:layout_constraintHorizontal_bias="0.03"
+            map:layout_constraintStart_toStartOf="parent"
+            map:layout_constraintTop_toBottomOf="@+id/btn_call_customer"
+            map:layout_constraintVertical_bias="0.49" />
+
+        <Button
+            android:id="@+id/btn_call_customer"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:background="@drawable/driver_activity_map_button_layout"
+            android:text="CALL CUSTOMER"
+            android:textColor="#FFFFFF"
+            map:layout_constraintBottom_toBottomOf="parent"
+            map:layout_constraintEnd_toEndOf="parent"
+            map:layout_constraintHorizontal_bias="0.01"
+            map:layout_constraintStart_toStartOf="parent"
+            map:layout_constraintTop_toTopOf="@+id/guideline63"
+            map:layout_constraintVertical_bias="0.152" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline63"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            map:layout_constraintGuide_percent="0.61" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            map:layout_constraintBottom_toTopOf="@+id/guideline63"
+            map:layout_constraintEnd_toEndOf="parent"
+
+            map:layout_constraintStart_toStartOf="parent"
+            map:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="391dp"
+                android:layout_height="204dp"
+                android:orientation="vertical"
+                android:padding="20dp"
+                map:layout_constraintBottom_toBottomOf="parent"
+                map:layout_constraintEnd_toEndOf="parent"
+                map:layout_constraintStart_toStartOf="parent"
+                map:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/customer_imageindriver"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    map:srcCompat="@drawable/contactus_icon" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView26"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Customer's Name:" />
+
+                    <TextView
+                        android:id="@+id/customer_name_indriver"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="name"
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView23"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Customer's Phone:" />
+
+                    <TextView
+                        android:id="@+id/customer_phone_indriver"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="phone"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView25"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Destination:" />
+
+                    <TextView
+                        android:id="@+id/customer_destination_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="phone"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <fragment
+
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        map:layout_constraintBottom_toBottomOf="parent"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintHorizontal_bias="0.0"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintTop_toTopOf="parent"
+        map:layout_constraintVertical_bias="0.0" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline59"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        map:layout_constraintGuide_percent="0.69" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_driver_Settings"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/custom_circle_3"
+        android:elevation="2dp"
+        android:visibility="invisible"
+        map:layout_constraintBottom_toBottomOf="parent"
+        map:layout_constraintDimensionRatio="1.3.5:1"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintTop_toTopOf="@+id/guideline59"
+        tools:visibility="invisible">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline1952"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+
+            map:layout_constraintGuide_percent="0.95" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline1852"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#E4FFFFFF"
+            android:orientation="vertical"
+            map:layout_constraintGuide_percent="0.05" />
+
+        <Switch
+            android:id="@+id/switch_driver_onOFF"
+            android:layout_width="142dp"
+            android:layout_height="56dp"
+            android:background="@drawable/switch_driver_back_red"
+            android:paddingStart="15dp"
+            android:text="OFFLINE"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            map:layout_constraintBottom_toBottomOf="parent"
+            map:layout_constraintEnd_toEndOf="parent"
+            map:layout_constraintHorizontal_bias="0.464"
+            map:layout_constraintStart_toStartOf="parent"
+            map:layout_constraintTop_toTopOf="parent"
+            map:layout_constraintVertical_bias="0.241"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+        <Button
+            android:id="@+id/btn_logout_driver"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:background="@drawable/driver_activity_map_button_layout"
+            android:text="Logout"
+            android:textColor="#FFFFFF"
+            map:layout_constraintBottom_toBottomOf="parent"
+            map:layout_constraintEnd_toStartOf="@+id/guideline1952"
+            map:layout_constraintHorizontal_bias="1.0"
+            map:layout_constraintStart_toStartOf="@+id/guideline1852"
+            map:layout_constraintTop_toBottomOf="@+id/switch_driver_onOFF"
+            map:layout_constraintVertical_bias="0.456" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
