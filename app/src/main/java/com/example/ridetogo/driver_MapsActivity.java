@@ -43,6 +43,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
@@ -349,7 +350,7 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
                             pickup_location_marker.remove();
 
                         if(destination_lat_lng.latitude!=0&&destination_lat_lng.longitude!=0)
-                        destination_location_marker = mymap.addMarker(new MarkerOptions().position((destination_lat_lng)).title("Ride Destination"));
+                        destination_location_marker = mymap.addMarker(new MarkerOptions().position((destination_lat_lng)).title("Ride Destination").icon(BitmapDescriptorFactory.fromResource(R.drawable.destination_flag_small)));
                         reference.removeEventListener(listener_pickup);
                         reference.setValue(null);
                         DatabaseReference ref=FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Ride_pick_time").child(driverID).child("pick_time");
@@ -498,7 +499,7 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
                         customer_long=Double.parseDouble(map_loc.get(1).toString());
 
                      customer_lat_lng=new LatLng(customer_lat,customer_long);
-                  pickup_location_marker= mymap.addMarker(new MarkerOptions().position((customer_lat_lng)).title("Pickup location"));
+                  pickup_location_marker= mymap.addMarker(new MarkerOptions().position((customer_lat_lng)).title("Pickup location").icon(BitmapDescriptorFactory.fromResource(R.drawable.start_route_small)));
                   if(customer_lat_lng.longitude!=0&&customer_lat_lng.latitude!=0)
                  getRouteToMarker(customer_lat_lng);
                 }

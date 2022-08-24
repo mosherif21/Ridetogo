@@ -363,7 +363,7 @@ return;
        btn_ride_details.setBackgroundColor(Color.BLACK);
         if(chosen_destination_marker!=null)
             chosen_destination_marker.remove();
-       chosen_destination_marker=mymap.addMarker(new MarkerOptions().position((adestination_latlng)).title(destination));
+       chosen_destination_marker=mymap.addMarker(new MarkerOptions().position((adestination_latlng)).title(destination).icon(BitmapDescriptorFactory.fromResource(R.drawable.destination_flag_small)));
 
     }
     private void drawDestinationonMap(){
@@ -436,7 +436,7 @@ return;
               mymap.setOnCameraIdleListener(null);
               map_marker_pickup_point.setVisibility(View.INVISIBLE);
               confirm_pickup_point_layout.setVisibility(View.INVISIBLE);
-              pickup_point_marker=mymap.addMarker(new MarkerOptions().position((confirmed_pickup_latlng)).title("Pickup Point"));
+              pickup_point_marker=mymap.addMarker(new MarkerOptions().position((confirmed_pickup_latlng)).title("Pickup Point").icon(BitmapDescriptorFactory.fromResource(R.drawable.pickup_flag_small)));
               request_ride(driver_class);
           }
       });
@@ -655,7 +655,7 @@ return;
                                                 pickup_long=Double.parseDouble(map_loc.get(1).toString());
                                             pickupLocation=new LatLng(pickup_lat,pickup_long);
                                             pickup_made_request_latlng=pickupLocation;
-                                            pickup_point_marker=mymap.addMarker(new MarkerOptions().position((pickupLocation)).title("Pickup Point"));
+                                            pickup_point_marker=mymap.addMarker(new MarkerOptions().position((pickupLocation)).title("Pickup Point").icon(BitmapDescriptorFactory.fromResource(R.drawable.pickup_flag_small)));
                                             getDriverLocation();
                                             getHasRideEnded();
                                             getDriverInfo();
@@ -729,7 +729,7 @@ return;
                                    pickup_long=Double.parseDouble(map_loc.get(1).toString());
                                pickupLocation=new LatLng(pickup_lat,pickup_long);
                                pickup_made_request_latlng=pickupLocation;
-                               pickup_point_marker=mymap.addMarker(new MarkerOptions().position((pickupLocation)).title("Pickup Point"));
+                               pickup_point_marker=mymap.addMarker(new MarkerOptions().position((pickupLocation)).title("Pickup Point").icon(BitmapDescriptorFactory.fromResource(R.drawable.pickup_flag_small)));
                                locations_rideDetails_layout.setVisibility(View.INVISIBLE);
                                ride_request_progress_layout.setVisibility(View.VISIBLE);
                                search_driver_anim.setVisibility(View.VISIBLE);
@@ -848,7 +848,7 @@ private void getdriverAskPick(String driverid){
         if(FoundDriver_uid!=null)
         FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders").child(userid).child("ongoingRide").setValue(FoundDriver_uid);
         FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders").child(userid).child("ongoingRequest").setValue(null);
-        chosen_destination_marker=mymap.addMarker(new MarkerOptions().position((destination_location_latlng)).title(destination_of_ride_request_chosen_name));
+        chosen_destination_marker=mymap.addMarker(new MarkerOptions().position((destination_location_latlng)).title(destination_of_ride_request_chosen_name).icon(BitmapDescriptorFactory.fromResource(R.drawable.destination_flag_small)));
       getRouteToMarker2(destination_location_latlng);
         btn_call_help.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -896,7 +896,7 @@ private void getdriverAskPick(String driverid){
                 ride_request_progress_txt.setText("Driver Found");
             }
              driver_latlng=driver_loc_latlng;
-            driver_loc_marker=mymap.addMarker(new MarkerOptions().position((driver_loc_latlng)).title("Your Driver"));
+            driver_loc_marker=mymap.addMarker(new MarkerOptions().position((driver_loc_latlng)).title("Your Driver").icon(BitmapDescriptorFactory.fromResource(R.drawable.car_small)));
             routePickupOrpickuppoint=1;
              getRouteToMarker2(driver_loc_latlng);
         }
