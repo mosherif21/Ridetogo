@@ -316,8 +316,11 @@ location_Request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 if(ActivityCompat.checkSelfPermission((getActivity()),Manifest.permission.ACCESS_FINE_LOCATION)!=PackageManager.PERMISSION_GRANTED&&ActivityCompat.checkSelfPermission((getActivity()),Manifest.permission.ACCESS_COARSE_LOCATION)!=PackageManager.PERMISSION_GRANTED)
 return;
     LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient,location_Request,this);
-        check_made_Request();
+        check_ongoing_ride();
         check_ongoing_request();
+        check_made_Request();
+
+
     }
 
     @Override
@@ -536,6 +539,76 @@ return;
         });
     }
     private void check_ongoing_ride(){
+        DatabaseReference ongoing_Req_ref=  FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders").child(userid).child("ongoingRide");
+        ongoing_Req_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    FoundDriver_uid=snapshot.getValue(String.class);
+                    locations_rideDetails_layout.setVisibility(View.INVISIBLE);
+                    DatabaseReference ongoing_request_Ref=FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference()
+                            .child("Users").child("Drivers").child(FoundDriver_uid).child("customerRequest");
+                    ongoing_request_Ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.exists()&&snapshot.getChildrenCount()>1){
+                                Map<String,Object> datamap=(Map<String, Object>) snapshot.getValue();
+                                if(datamap.get("CustomerRideId")!=null){
+                                    cust_id=datamap.get("CustomerRideId").toString();
+                                }
+                                if(datamap.get("destination_name")!=null){
+                                    destination_of_ride_request_chosen_name=datamap.get("destination_name").toString();
+                                }
+                                double destination_lat=0;
+                                double destination_lng=0;
+                                if(datamap.get("destination_lat")!=null){
+                                    destination_lat=  Double.parseDouble(datamap.get("destination_lat").toString().toString());
+                                }
+                                if(datamap.get("destination_lng")!=null){
+                                    destination_lng=  Double.parseDouble(datamap.get("destination_lng").toString().toString());
+                                }
+                                destination_location_latlng=new LatLng(destination_lat,destination_lng);
+                                DatabaseReference pickup_point_Ref=FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("CustomerRequest").child(userid).child("l");
+                                pickup_point_Ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        if(snapshot.exists() ){
+                                            List<Object> map_loc=(List<Object>) snapshot.getValue();
+                                            double pickup_long=0;
+                                            double pickup_lat=0;
+                                            if(map_loc.get(0)!=null)
+                                                pickup_lat=Double.parseDouble(map_loc.get(0).toString());
+                                            if(map_loc.get(1)!=null)
+                                                pickup_long=Double.parseDouble(map_loc.get(1).toString());
+                                            pickupLocation=new LatLng(pickup_lat,pickup_long);
+                                            pickup_made_request_latlng=pickupLocation;
+                                            zoom_first_time=true;
+                                            request_bol=true;
+                                            startRide();
+                                            getHasRideEnded();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+                                    }
+                                });
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
     }
     private void check_ongoing_request(){
@@ -768,11 +841,14 @@ private void getdriverAskPick(String driverid){
             driver_loc.removeEventListener(driver_locListener);
     if(pickup_point_marker!=null)
         pickup_point_marker.remove();
-    if(driver_loc_marker!=null)
+      if(driver_loc_marker!=null)
         driver_loc_marker.remove();
-        chosen_destination_marker=mymap.addMarker(new MarkerOptions().position((destination_location_latlng)).title(destination_of_ride_request_chosen_name));
+
         routePickupOrpickuppoint=3;
+        if(FoundDriver_uid!=null)
         FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders").child(userid).child("ongoingRide").setValue(FoundDriver_uid);
+        FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders").child(userid).child("ongoingRequest").setValue(null);
+        chosen_destination_marker=mymap.addMarker(new MarkerOptions().position((destination_location_latlng)).title(destination_of_ride_request_chosen_name));
       getRouteToMarker2(destination_location_latlng);
         btn_call_help.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -989,6 +1065,7 @@ private void getdriverAskPick(String driverid){
             });
             FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders").child(userid).child("CurrentRequest").setValue(null);
             FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders").child(userid).child("ongoingRequest").setValue(null);
+            FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders").child(userid).child("ongoingRide").setValue(null);
             dest_text.setText("Where to?");
             ride_request_progress_layout.setVisibility(View.INVISIBLE);
             map_marker_pickup_point.setVisibility(View.INVISIBLE);

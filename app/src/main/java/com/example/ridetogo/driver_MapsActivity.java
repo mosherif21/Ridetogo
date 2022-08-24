@@ -390,9 +390,11 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
 
                 }
             });
-            if(!assigned_customer_id.equals(""))
-            FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders").child(assigned_customer_id).child("ongoingRequest").setValue(null);
-            FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("pickRequest").child(userid).setValue(null);
+            if(!assigned_customer_id.equals("")) {
+                FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders").child(assigned_customer_id).child("ongoingRequest").setValue(null);
+                FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders").child(assigned_customer_id).child("ongoingRide").setValue(null);
+            }
+        FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("pickRequest").child(userid).setValue(null);
 
         assigned_customer_id="";
             if(pickup_location_marker!=null)
