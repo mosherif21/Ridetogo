@@ -13,6 +13,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -58,6 +60,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -103,6 +106,8 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
      Long start_ride_timestamp;
     Long end_ride_timestamp;
     CardView my_location_button;
+    MediaPlayer mediaPlayer;
+    private boolean ongoing_Ride=false;
     //logout vars for handling location on logout
     private boolean logout_bol=false;
     private int location_changed_onstop=0;
@@ -248,7 +253,15 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
             layout_onGoing_ride.setVisibility(View.INVISIBLE);
     if(destination_location_marker!=null)
         destination_location_marker.remove();
-    eraseRoutePolyLines();
+            if(music_Ref!=null&&music_listener!=null)
+                music_Ref.removeEventListener(music_listener);
+            if(music_Ref_pause!=null&&music_listener_pause!=null)
+                music_Ref_pause.removeEventListener(music_listener_pause);
+            if(userid!=null){
+                FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(userid).child("playsong").setValue(null);
+                FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(userid).child("pausesong").setValue(null);
+            }
+     eraseRoutePolyLines();
     fn_cancel_request();
      }
     private void saveRideInfo(){
@@ -355,6 +368,8 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
                         reference.setValue(null);
                         DatabaseReference ref=FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Ride_pick_time").child(driverID).child("pick_time");
                         ref.setValue(getCurrentTimestamp());
+                        ongoing_Ride=true;
+                        Listen_for_customer_songs();
                     }
                 }
                 else  reference.removeEventListener(listener_pickup);
@@ -374,6 +389,7 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
         layout_assigned_customer_info.setVisibility(View.INVISIBLE);
         layout_driver_settings.setVisibility(View.VISIBLE);
         eraseRoutePolyLines();
+        ongoing_Ride=false;
         customer_name.setText("");
         customer_destination.setText("");
         customer_phone.setText("");
@@ -708,4 +724,85 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
         }
         polylines.clear();
     }
+    ValueEventListener music_listener;
+    DatabaseReference music_Ref;
+    ValueEventListener music_listener_pause;
+    DatabaseReference music_Ref_pause;
+    private void Listen_for_customer_songs(){
+        if(ongoing_Ride){
+      music_Ref=  FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(userid).child("playsong");
+      music_listener=music_Ref.addValueEventListener(new ValueEventListener() {
+          @Override
+          public void onDataChange(@NonNull DataSnapshot snapshot) {
+           if(snapshot.exists()){
+               String song_url=snapshot.getValue(String.class);
+               playAudio(song_url);
+           }
+          }
+          @Override
+          public void onCancelled(@NonNull DatabaseError error) {
+
+          }
+      });
+            music_Ref_pause=  FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(userid).child("pausesong");
+            music_listener_pause=music_Ref_pause.addValueEventListener(new ValueEventListener() {
+          @Override
+          public void onDataChange(@NonNull DataSnapshot snapshot) {
+           if(snapshot.exists()){
+               FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(userid).child("playsong").setValue(null);
+               FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(userid).child("pause").setValue(null);
+               pauseAudio();
+           }
+          }
+          @Override
+          public void onCancelled(@NonNull DatabaseError error) {
+
+          }
+      });
+    }
+    }
+    private void pauseAudio(){
+        if (mediaPlayer.isPlaying()) {
+            // pausing the media player if media player
+            // is playing we are calling below line to
+            // stop our media player.
+            mediaPlayer.stop();
+            mediaPlayer.reset();
+            mediaPlayer.release();
+
+            // below line is to display a message
+            // when media player is paused.
+            Toast.makeText(driver_MapsActivity.this, "Audio has been paused", Toast.LENGTH_SHORT).show();
+        } else {
+            // this method is called when media
+            // player is not playing.
+            Toast.makeText(driver_MapsActivity.this, "Audio has not played", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void playAudio(String song_url) {
+
+
+
+        // initializing media player
+        mediaPlayer = new MediaPlayer();
+
+        // below line is use to set the audio
+        // stream type for our media player.
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+        // below line is use to set our
+        // url to our media player.
+        try {
+            mediaPlayer.setDataSource(song_url);
+            // below line is use to prepare
+            // and start our media player.
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+     }
+
 }

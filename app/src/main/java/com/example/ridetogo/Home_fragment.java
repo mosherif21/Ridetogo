@@ -124,7 +124,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback,Google
     SlidingUpPanelLayout panel;
     Button btn_cancel_request;
   ProgressBar progressBar;
-
+    boolean ongoing_Ride=false;
 
     //ride request vars
     String cust_id;
@@ -584,6 +584,7 @@ return;
                                             pickup_made_request_latlng=pickupLocation;
                                             zoom_first_time=true;
                                             request_bol=true;
+
                                             startRide();
                                             getHasRideEnded();
                                         }
@@ -843,7 +844,7 @@ private void getdriverAskPick(String driverid){
         pickup_point_marker.remove();
       if(driver_loc_marker!=null)
         driver_loc_marker.remove();
-
+        ongoing_Ride = true;
         routePickupOrpickuppoint=3;
         if(FoundDriver_uid!=null)
         FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders").child(userid).child("ongoingRide").setValue(FoundDriver_uid);
@@ -1033,6 +1034,7 @@ private void getdriverAskPick(String driverid){
            bol_zoom_onDriver=false;
             routePickupOrpickuppoint=0;
             request_bol=false;
+            ongoing_Ride = false;
             if(geoQuery1!=null)
             geoQuery1.removeAllListeners();
           layout_ride_ongoing.setVisibility(View.INVISIBLE);
@@ -1311,5 +1313,25 @@ boolean bol_zoom_onDriver=false;
 
     }
 
+private void send_music_play_request(String song_url){
+if(ongoing_Ride&&FoundDriver_uid!=null){
+    FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("playsong").setValue(song_url);
+    FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("pausesong").setValue(null);
 
+}
+}
+public void public_play_music_Request(String song_url){
+    send_music_play_request(song_url);
+}
+private void send_music_pause_request(){
+if(ongoing_Ride&&FoundDriver_uid!=null){
+    FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("playsong").setValue(null);
+    FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("pausesong").setValue(true);
+  //  FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("playmusic").setValue(null);
+
+}
+}
+public void public_pause_music_Request(){
+    send_music_pause_request();
+}
 }

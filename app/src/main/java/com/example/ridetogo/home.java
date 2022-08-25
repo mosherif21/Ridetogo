@@ -285,4 +285,10 @@ private void logout_priv(){
         unregisterReceiver(location_listener);
         super.onStop();
     }
+    public void play_music_req(String song_url){
+        home.public_play_music_Request(song_url);
+    }
+    public void pause_music_req(){
+        home.public_pause_music_Request();
+    }
 }
