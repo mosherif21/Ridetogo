@@ -158,7 +158,6 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
             @Override
             public void onClick(View v) {
              if(!assigned_customer_id.equals("")){
-
                  DatabaseReference reference=FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
                  if(reference!=null)
                      reference.child("pickRequest").child(userid).child("pickCustomer").setValue("ask");
@@ -189,7 +188,7 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
 
             }
         });
-           btn_end_ride.setOnClickListener(new View.OnClickListener() {
+        btn_end_ride.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(driver_MapsActivity.this);
@@ -212,7 +211,7 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
                    }
            });
 
-     logout.setOnClickListener(new View.OnClickListener() {
+        logout.setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View v) {
              AlertDialog.Builder builder = new AlertDialog.Builder(driver_MapsActivity.this);
@@ -248,7 +247,6 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
 
     }
         private void fn_EndRide(){
-
             saveRideInfo();
             layout_onGoing_ride.setVisibility(View.INVISIBLE);
     if(destination_location_marker!=null)
@@ -341,8 +339,6 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
         return timestamp;
     }
 
-
-
     ValueEventListener listener_pickup;
     private void getIfUserAcceptPickupRequest() {
         String driverID=FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -361,7 +357,6 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
                         getRouteToMarker(destination_lat_lng);
                              if(pickup_location_marker!=null)
                             pickup_location_marker.remove();
-
                         if(destination_lat_lng.latitude!=0&&destination_lat_lng.longitude!=0)
                         destination_location_marker = mymap.addMarker(new MarkerOptions().position((destination_lat_lng)).title("Ride Destination").icon(BitmapDescriptorFactory.fromResource(R.drawable.destination_flag_small)));
                         reference.removeEventListener(listener_pickup);
@@ -412,7 +407,6 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
                 FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders").child(assigned_customer_id).child("ongoingRide").setValue(null);
             }
         FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("pickRequest").child(userid).setValue(null);
-
         assigned_customer_id="";
             if(pickup_location_marker!=null)
                 pickup_location_marker.remove();

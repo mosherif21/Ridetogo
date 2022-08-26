@@ -206,9 +206,9 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback,Google
 
             mapsupp = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_map);
             if(ActivityCompat.checkSelfPermission((getActivity()),Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED&&ActivityCompat.checkSelfPermission((getActivity()),Manifest.permission.ACCESS_COARSE_LOCATION)==PackageManager.PERMISSION_GRANTED)
-            {mapsupp.getMapAsync(this);
+            {
+                mapsupp.getMapAsync(this);
             }
-
             btn_whereto.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
