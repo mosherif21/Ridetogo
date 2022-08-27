@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
-public class spaceitem extends navitem<spaceitem.ViewHolder>{
+public class spaceitem extends navitem<spaceitem.ViewHolder> {
     private int spacedp;
 
     public spaceitem(int spacedp) {
@@ -15,13 +15,13 @@ public class spaceitem extends navitem<spaceitem.ViewHolder>{
 
     @Override
     public ViewHolder createViewHolder(ViewGroup parent) {
-       Context context=parent.getContext();
-       View view=new View(context);
-       int height=(int) (context.getResources().getDisplayMetrics().density*spacedp);
-       view.setLayoutParams(new ViewGroup.LayoutParams(
-               ViewGroup.LayoutParams.MATCH_PARENT,height
-       ));
-       return new ViewHolder(view);
+        Context context = parent.getContext();
+        View view = new View(context);
+        int height = (int) (context.getResources().getDisplayMetrics().density * spacedp);
+        view.setLayoutParams(new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, height
+        ));
+        return new ViewHolder(view);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class spaceitem extends navitem<spaceitem.ViewHolder>{
 
     }
 
-    public class ViewHolder extends nav_items_adapter.ViewHolder{
+    public class ViewHolder extends nav_items_adapter.ViewHolder {
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

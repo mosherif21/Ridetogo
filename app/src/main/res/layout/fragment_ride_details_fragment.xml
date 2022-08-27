@@ -27,7 +27,7 @@
         android:id="@+id/btn_confirm_ride_details"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:backgroundTint="#7A7979"
+        android:backgroundTint="@color/black"
         android:text="Confirm ride details"
         android:textStyle="bold"
         app:cornerRadius="30dp"
@@ -62,5 +62,18 @@
             android:layout_height="wrap_content"
             android:text="wasalny" />
     </RadioGroup>
+
+    <TextView
+        android:id="@+id/txt_ride_class_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:text="Please choose a ride class"
+        android:textColor="#FA0000"
+        app:layout_constraintBottom_toTopOf="@+id/btn_confirm_ride_details"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.155"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radio_group_ride_details" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

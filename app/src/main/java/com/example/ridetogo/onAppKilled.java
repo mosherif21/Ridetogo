@@ -22,9 +22,9 @@ public class onAppKilled extends Service {
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
-      String  userid= FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference ref= FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference("AvailableDrivers");
-        GeoFire geofire=new GeoFire(ref);
+        String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference("AvailableDrivers");
+        GeoFire geofire = new GeoFire(ref);
         geofire.removeLocation(userid, new GeoFire.CompletionListener() {
             @Override
             public void onComplete(String key, DatabaseError error) {
