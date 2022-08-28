@@ -81,7 +81,6 @@ import java.util.Map;
 
 
 public class Home_fragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, RoutingListener {
-    private static final String CHANNEL_ID = "12312312";
     //ui or general vars
     LottieAnimationView map_marker_pickup_point;
     TextView dest_text;
