@@ -548,10 +548,10 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
                                 double destination_lat = 0;
                                 double destination_lng = 0;
                                 if (datamap.get("destination_lat") != null) {
-                                    destination_lat = Double.parseDouble(datamap.get("destination_lat").toString().toString());
+                                    destination_lat = Double.parseDouble(datamap.get("destination_lat").toString());
                                 }
                                 if (datamap.get("destination_lng") != null) {
-                                    destination_lng = Double.parseDouble(datamap.get("destination_lng").toString().toString());
+                                    destination_lng = Double.parseDouble(datamap.get("destination_lng").toString());
                                 }
                                 destination_location_latlng = new LatLng(destination_lat, destination_lng);
                                 DatabaseReference pickup_point_Ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("CustomerRequest").child(userid).child("l");
@@ -624,10 +624,10 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
                                 double destination_lat = 0;
                                 double destination_lng = 0;
                                 if (datamap.get("destination_lat") != null) {
-                                    destination_lat = Double.parseDouble(datamap.get("destination_lat").toString().toString());
+                                    destination_lat = Double.parseDouble(datamap.get("destination_lat").toString());
                                 }
                                 if (datamap.get("destination_lng") != null) {
-                                    destination_lng = Double.parseDouble(datamap.get("destination_lng").toString().toString());
+                                    destination_lng = Double.parseDouble(datamap.get("destination_lng").toString());
                                 }
                                 destination_location_latlng = new LatLng(destination_lat, destination_lng);
                                 DatabaseReference pickup_point_Ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("CustomerRequest").child(userid).child("l");
@@ -698,10 +698,10 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
                     double destination_lat = 0;
                     double destination_lng = 0;
                     if (datamap.get("destination_lat") != null) {
-                        destination_lat = Double.parseDouble(datamap.get("destination_lat").toString().toString());
+                        destination_lat = Double.parseDouble(datamap.get("destination_lat").toString());
                     }
                     if (datamap.get("destination_lng") != null) {
-                        destination_lng = Double.parseDouble(datamap.get("destination_lng").toString().toString());
+                        destination_lng = Double.parseDouble(datamap.get("destination_lng").toString());
                     }
                     destination_location_latlng = new LatLng(destination_lat, destination_lng);
 
