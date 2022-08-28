@@ -1010,7 +1010,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
 
                             }
                         });
-                        driver_ref.removeEventListener(driver_listener);
+
                     }
                     fn_endpickupProgress();
 
@@ -1038,8 +1038,6 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
             layout_ride_ongoing.setVisibility(View.INVISIBLE);
             if (chosen_destination_marker != null)
                 chosen_destination_marker.remove();
-            if (driver_loc != null && driver_locListener != null)
-                driver_loc.removeEventListener(driver_locListener);
             if (FoundDriver_uid != null) {
                 DatabaseReference driver_ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("customerRequest");
                 if (driver_ref != null)
