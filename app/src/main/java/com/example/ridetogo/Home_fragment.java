@@ -1320,7 +1320,6 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
         if (ongoing_Ride && FoundDriver_uid != null) {
             FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("playsong").setValue(song_url);
             FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("pausesong").setValue(null);
-
         }
     }
 
@@ -1332,8 +1331,6 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
         if (ongoing_Ride && FoundDriver_uid != null) {
             FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("playsong").setValue(null);
             FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("pausesong").setValue(true);
-            //  FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("playmusic").setValue(null);
-
         }
     }
 
