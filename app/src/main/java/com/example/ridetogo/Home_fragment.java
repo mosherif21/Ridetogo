@@ -81,6 +81,8 @@ import java.util.Map;
 
 
 public class Home_fragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, RoutingListener {
+    private static final int[] COLORS = new int[]{R.color.black};
+    public boolean first_back = false;
     //ui or general vars
     LottieAnimationView map_marker_pickup_point;
     TextView dest_text;
@@ -90,7 +92,6 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
     ConstraintLayout confirm_pickup_point_layout;
     ConstraintLayout layout_ride_ongoing;
     LottieAnimationView set_myloc;
-
     GoogleApiClient googleApiClient;
     Location mlocation;
     LocationRequest location_Request;
@@ -104,15 +105,11 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
     Button btn_cancel_request;
     ProgressBar progressBar;
     boolean ongoing_Ride = false;
-
     //ride request vars
     String cust_id;
     LatLng pickupLocation;
     LatLng pickup_made_request_latlng = null;
     LatLng destination_location_latlng;
-    private int radius = 1;
-    private boolean FoundDriver = false;
-    private String FoundDriver_uid;
     Marker driver_loc_marker;
     Marker pickup_point_marker;
     GeoQuery geoQuery1;
@@ -134,19 +131,31 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
     Button btn_driver_info;
     LottieAnimationView search_driver_anim;
     Button btn_call_help;
-    //route drawing vars
-    private List<Polyline> polylines;
-    private static final int[] COLORS = new int[]{R.color.black};
     int routePickupOrpickuppoint = 0;
     Marker chosen_destination_marker;
     int back_state = 0;
-
     boolean pickup_point_bool = false;
     //notification
     int notificationId = 20;
     NotificationCompat.Builder builder;
     NotificationManagerCompat notificationManager;
     View v;
+    ValueEventListener listener_pickup;
+    boolean notify_once = false;
+    boolean notify_once3 = false;
+    boolean notify_once2 = false;
+    DatabaseReference driver_ref;
+    ValueEventListener driver_listener;
+    ValueEventListener listener;
+    String average_driver_rating;
+    String image_profileurl;
+    Boolean zoom_first_time = false;
+    boolean bol_zoom_onDriver = false;
+    private int radius = 1;
+    private boolean FoundDriver = false;
+    private String FoundDriver_uid;
+    //route drawing vars
+    private List<Polyline> polylines;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -236,8 +245,6 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
         return v;
     }
 
-    public boolean first_back = false;
-
     public void back_key() {
         if (!first_back) {
             back_key_apply();
@@ -288,7 +295,6 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
     public void onStop() {
         super.onStop();
     }
-
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -426,7 +432,6 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
         });
     }
 
-
     public void request_ride(String ride_class) {
         if (!request_bol) {
             back_state = 0;
@@ -464,7 +469,6 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
         }
 
     }
-
 
     private void findClosestDriver(String ride_class, LatLng pickup_latlng_search) {
         DatabaseReference ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference("AvailableDrivers");
@@ -774,8 +778,6 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
         }
     }
 
-    ValueEventListener listener_pickup;
-
     private void getdriverAskPick(String driverid) {
 
         DatabaseReference reference = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("pickRequest").child(driverid).child("pickCustomer");
@@ -915,8 +917,6 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
         }
     }
 
-    boolean notify_once = false;
-
     private void notify_driver_near() {
         if (!notify_once) {
             notify_once = true;
@@ -929,8 +929,6 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
         }
     }
 
-    boolean notify_once3 = false;
-
     private void notify_ride_end(String price) {
         if (!notify_once3) {
             notify_once3 = true;
@@ -942,8 +940,6 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
             notificationManager.notify(notificationId, builder.build());
         }
     }
-
-    boolean notify_once2 = false;
 
     private void notify_driver_arrrived() {
         if (!notify_once2) {
@@ -969,10 +965,6 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
             routing.execute();
         }
     }
-
-    DatabaseReference driver_ref;
-    ValueEventListener driver_listener;
-    ValueEventListener listener;
 
     private void getHasRideEnded() {
         driver_ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("customerRequest");
@@ -1079,9 +1071,6 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
         }
     }
 
-    String average_driver_rating;
-    String image_profileurl;
-
     private void getDriverInfo() {
         if (FoundDriver_uid != null) {
             DatabaseReference customer_Ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Users").child("Drivers").child(FoundDriver_uid);
@@ -1140,8 +1129,6 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
             });
         }
     }
-
-    Boolean zoom_first_time = false;
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
@@ -1249,8 +1236,6 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
     public void onRoutingStart() {
 
     }
-
-    boolean bol_zoom_onDriver = false;
 
     @Override
     public void onRoutingSuccess(ArrayList<Route> route, int shortestRouteIndex) {
