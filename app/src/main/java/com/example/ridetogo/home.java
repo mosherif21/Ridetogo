@@ -41,7 +41,7 @@ DrawerLayout drawer;
 NavigationView naview;*/
 
     static final int LOCATION_REQUEST_CODE = 10;
-    private static final int frag_close = 0;
+    //navigation bar variables for items selected
     private static final int frag_home = 1;
     private static final int frag_notifications = 2;
     private static final int frag_ride_history = 3;
@@ -49,14 +49,24 @@ NavigationView naview;*/
     private static final int frag_playMusic = 5;
     private static final int frag_Complain = 7;
     private static final int frag_Contact_us = 8;
-    public FragmentTransaction transaction;
-    Toolbar toolbar;
+
+    //location and network listeners
     network_listener network_listener = new network_listener();
     location_listener location_listener = new location_listener();
+
+    //home fragment instance
     Home_fragment home = new Home_fragment();
+
+    //fragment manager vars
+    private FragmentTransaction transaction;
     FragmentManager manager = getSupportFragmentManager();
+
+    //two container views bec home fragment contains google maps which can't be replaced with others in same fragment
     FragmentContainerView home_container_view;
     FragmentContainerView other_container_view;
+
+    //ui vars
+    Toolbar toolbar;
     private RecyclerView nav_list;
     private String[] nav_titles;
     private int[] nav_icons;
@@ -66,16 +76,24 @@ NavigationView naview;*/
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_activity);
+        //hide action bar
+        getSupportActionBar().hide();
+
+        //link ui vars
         com.example.ridetogo.Listeners.network_listener.updateActivity(this, 1);
         home_container_view = findViewById(R.id.home_fragment_container);
         other_container_view = findViewById(R.id.fragment_other_fragments);
         other_container_view.setVisibility(View.INVISIBLE);
+        toolbar = findViewById(R.id.home_toolbar);
+        nav_list = findViewById(R.id.nav_items_list);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        getSupportActionBar().hide();
+
+        //check if app has location permission if not request it
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_REQUEST_CODE);
         }
-        toolbar = findViewById(R.id.home_toolbar);
+
+        //navigation var assign
         nav_icons = getnavicons();
         nav_titles = getnavtitle();
         navigation = new SlidingRootNavBuilder(this)
@@ -90,6 +108,7 @@ NavigationView naview;*/
                 .withMenuLayout(R.layout.navigation_menu)
                 .inject();
 
+        //initialize navigation bar items
         nav_items_adapter adapter = new nav_items_adapter(Arrays.asList(
                 new spaceitem(80),
                 nav(frag_home)
@@ -102,13 +121,13 @@ NavigationView naview;*/
                 nav(frag_Contact_us)
         ));
         adapter.setListener(this);
-        nav_list = findViewById(R.id.nav_items_list);
         nav_list.setNestedScrollingEnabled(false);
         nav_list.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         nav_list.setAdapter(adapter);
         adapter.setSelected(frag_home);
     }
 
+    //navigation bar items icons array
     private int[] getnavicons() {
         int[] iconres = new int[9];
         iconres[0] = 0;
@@ -123,6 +142,7 @@ NavigationView naview;*/
         return iconres;
     }
 
+    //navigation bar items titles array
     private String[] getnavtitle() {
         String[] titles = new String[9];
         titles[0] = "";
@@ -137,12 +157,14 @@ NavigationView naview;*/
         return titles;
     }
 
+    //change navigation bar items titles color based on what is selected
     private navitem nav(int counter) {
         return new simpleitem(nav_icons[counter], nav_titles[counter])
                 .applyselectedtexttint(Color.parseColor("#000000"))
                 .texttint(Color.parseColor("#878787"));
     }
 
+    //logout function to be used by settings fragment
     public void logout() {
         logout_priv();
     }
@@ -155,6 +177,7 @@ NavigationView naview;*/
         finish();
     }
 
+    //back press override to close the navigation bar if opened or notify home home fragment that back press was triggered
     @Override
     public void onBackPressed() {
         if (navigation.isMenuOpened()) {
@@ -167,7 +190,7 @@ NavigationView naview;*/
         }
     }
 
-
+    //replace fragments in fragment container based on selected item
     @Override
     public void onItemSelected(int position) {
         transaction = manager.beginTransaction();
@@ -230,7 +253,7 @@ NavigationView naview;*/
         transaction.commit();
     }
 
-    public void loc() {
+    private void loc() {
         if (!gps_connection.locationTurnedOn(this)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             View no_internet_layout = LayoutInflater.from(this).inflate(R.layout.no_location_dialogue, null);
@@ -260,12 +283,15 @@ NavigationView naview;*/
                     ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_REQUEST_CODE);
                     Toast.makeText(this, "Please accept locations permission to use the app", Toast.LENGTH_SHORT).show();
                 }
+                else {
+                }
             }
         }
     }
 
     @Override
     protected void onStart() {
+        //register network and location listeners
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(network_listener, filter);
         IntentFilter filter2 = new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION);
@@ -281,6 +307,7 @@ NavigationView naview;*/
 
     @Override
     protected void onStop() {
+        //unregister listeners on stop of activity
         unregisterReceiver(network_listener);
         unregisterReceiver(location_listener);
         super.onStop();

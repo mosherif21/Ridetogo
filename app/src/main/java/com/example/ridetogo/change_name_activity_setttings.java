@@ -12,8 +12,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class change_name_activity_setttings extends AppCompatActivity {
+    //firebase vars
     DatabaseReference customer_Ref;
     String userid;
+
+    //ui vars
     EditText name;
     Button btn_save;
 
@@ -22,13 +25,17 @@ public class change_name_activity_setttings extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_name_setttings);
         getSupportActionBar().hide();
+        //link ui vars
         name = findViewById(R.id.save_newName);
         btn_save = findViewById(R.id.btn_save_newName);
+
+        //get name from previous activity
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             String value = extras.getString("user_name");
             name.setText(value);
         }
+        //update name in firebase using user id
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

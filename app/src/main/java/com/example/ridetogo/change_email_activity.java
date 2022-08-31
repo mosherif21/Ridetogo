@@ -19,9 +19,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class change_email_activity extends AppCompatActivity {
+    //firebase variables
     FirebaseUser user;
     DatabaseReference customer_Ref;
     String userid;
+
+    //ui vars
     EditText email_editor;
     EditText pass_editor;
     Button btn_save;
@@ -32,10 +35,13 @@ public class change_email_activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_email);
         getSupportActionBar().hide();
+        //link ui vars with corresponding layout
         email_editor = findViewById(R.id.save_newEmail);
         btn_save = findViewById(R.id.btn_save_newEmail);
         email_error = findViewById(R.id.txt_email_change_error);
         pass_editor = findViewById(R.id.password_for_emailChange);
+
+        //get email from previous activity
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             String value = extras.getString("user_email");
@@ -51,6 +57,8 @@ public class change_email_activity extends AppCompatActivity {
                     email_error.setVisibility(View.INVISIBLE);
                     user = FirebaseAuth.getInstance().getCurrentUser();
                     final String email = user.getEmail();
+
+                    //sign in with old email and password entered if successful update email
                     AuthCredential credential = EmailAuthProvider.getCredential(email, pass_editor.getText().toString().trim());
                     user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
                         public void onComplete(@NonNull Task<Void> task) {

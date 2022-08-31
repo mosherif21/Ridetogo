@@ -26,10 +26,13 @@ import com.google.firebase.database.ValueEventListener;
 import com.hbb20.CountryCodePicker;
 
 public class login extends AppCompatActivity {
+    //ui vars
     CountryCodePicker country_code;
     EditText phone_num;
     Button btn_continue;
     ProgressBar progressBar;
+
+    //network listener
     network_listener network_listener = new network_listener();
 
     public static void hideSoftKeyboard(Activity activity) {
@@ -43,13 +46,19 @@ public class login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         getSupportActionBar().hide();
+
+        //network listener change activity
         com.example.ridetogo.Listeners.network_listener.updateActivity(this, 0);
+
+        //link ui vars
         country_code = findViewById(R.id.countryCodePicker);
         phone_num = findViewById(R.id.phone_number);
         btn_continue = findViewById(R.id.btn_login);
         btn_continue.setClickable(false);
         progressBar = findViewById(R.id.login_progressbar);
         country_code.registerCarrierNumberEditText(phone_num);
+
+        //if number is valid allow continue button
         country_code.setPhoneNumberValidityChangeListener(new CountryCodePicker.PhoneNumberValidityChangeListener() {
             @Override
             public void onValidityChanged(boolean isValidNumber) {
@@ -63,12 +72,13 @@ public class login extends AppCompatActivity {
                                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             progressBar.setVisibility(View.VISIBLE);
                             String full_phone_no = "+" + country_code.getFullNumber();
+                            //check if entered number already used by driver
                             FirebaseDatabase database = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/");
                             Query checkuser_exists = database.getReference("Users").child("Drivers").orderByChild("Phone").equalTo(full_phone_no.trim());
                             checkuser_exists.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-
+                                    //if exists go to login activity
                                     if (snapshot.exists()) {
                                         progressBar.setVisibility(View.INVISIBLE);
                                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -79,6 +89,7 @@ public class login extends AppCompatActivity {
                                         finish();
                                         hideSoftKeyboard(login.this);
                                     } else {
+                                        //check if entered number already used by rider
                                         Query checkuser_exists = database.getReference("Users").child("Riders").orderByChild("Phone").equalTo(full_phone_no.trim());
                                         checkuser_exists.addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
@@ -86,7 +97,7 @@ public class login extends AppCompatActivity {
                                                 progressBar.setVisibility(View.INVISIBLE);
                                                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                 if (snapshot.exists()) {
-
+                                                    //if exists go to login activity
                                                     progressBar.setVisibility(View.INVISIBLE);
                                                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                     Intent intent = new Intent(login.this, perform_login.class);
@@ -95,6 +106,7 @@ public class login extends AppCompatActivity {
                                                     startActivity(intent);
                                                     hideSoftKeyboard(login.this);
                                                 } else {
+                                                    //if number is not registered then go to otp verification activity
                                                     Intent intent = new Intent(login.this, otpverifacation.class);
                                                     intent.putExtra("phone_no", full_phone_no);
                                                     startActivity(intent);
@@ -133,6 +145,7 @@ public class login extends AppCompatActivity {
 
     @Override
     protected void onStart() {
+        //register network listener
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(network_listener, filter);
         super.onStart();
@@ -140,6 +153,7 @@ public class login extends AppCompatActivity {
 
     @Override
     protected void onStop() {
+        //unregister network listener on stop
         unregisterReceiver(network_listener);
         super.onStop();
     }
