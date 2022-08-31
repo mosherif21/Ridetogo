@@ -26,12 +26,11 @@ import java.util.List;
 import java.util.Locale;
 
 public class ride_location_fragment extends Fragment {
-    private static int AUTOCOMPLETE_REQUEST_CODE = 1;
-    EditText pickup_loc;
-    Location user_location;
-    Button skip_destination;
+    private EditText pickup_loc;
+    private Location user_location;
+    private Button skip_destination;
 
-    public ride_location_fragment(Location user_location) {
+    protected ride_location_fragment(Location user_location) {
         this.user_location = user_location;
 
     }

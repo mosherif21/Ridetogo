@@ -5,7 +5,7 @@ import android.location.LocationManager;
 
 public class gps_connection {
     //class to check if location services are turned on
-    public static boolean locationTurnedOn(Context context) {
+    protected static boolean locationTurnedOn(Context context) {
         LocationManager lm = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
         boolean gps_enabled = false;
         try {

@@ -1,9 +1,9 @@
 package com.example.ridetogo;
 
+import android.animation.Animator;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
@@ -31,11 +30,12 @@ import com.google.firebase.database.ValueEventListener;
 
 
 public class MainActivity extends AppCompatActivity {
-    ImageView logo, backimg;
-    LottieAnimationView animation;
-    ConstraintLayout layout;
-    boarding_page_adapter adapter;
-    Handler handler = new Handler();
+    //ui vars
+    private ImageView logo, backimg;
+    private LottieAnimationView animation;
+    private boarding_page_adapter adapter;
+    private Animator.AnimatorListener anim_listener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
             ViewPager viewpager;
             backimg.animate().translationY(1800).setStartDelay(2850).setDuration(500);
             logo.animate().translationY(1800).setStartDelay(2850).setDuration(500);
+            logo.animate().setListener(anim_listener);
             animation.animate().translationY(1800).setStartDelay(2850).setDuration(500);
             Animation splash_animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in_anim);
             splash_animation.setStartOffset(2800);
@@ -68,19 +69,16 @@ public class MainActivity extends AppCompatActivity {
             viewpager.setAdapter(adapter);
             viewpager.setAnimation(splash_animation);
         } else {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    launch();
-                }
-            }, 2000);
+
+            launch();
+
 
         }
 
 
     }
 
-    public void skip_intro(int skip) {
+    protected void skip_intro(int skip) {
 
         SharedPreferences shpref = getSharedPreferences("MyPrefsFile", 0);
         shpref.edit().putBoolean("skip_intro", false).apply();
@@ -88,17 +86,14 @@ public class MainActivity extends AppCompatActivity {
             launch();
         } else {
 
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    launch();
-                }
-            }, 1800);
+
+            launch();
+
         }
 
     }
 
-    public void launch() {
+    private void launch() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             Query checkuser_exists = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").
@@ -138,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
-    public static class boarding_page_adapter extends FragmentStatePagerAdapter {
+    private static class boarding_page_adapter extends FragmentStatePagerAdapter {
         public boarding_page_adapter(@NonNull FragmentManager fm) {
             super(fm);
         }

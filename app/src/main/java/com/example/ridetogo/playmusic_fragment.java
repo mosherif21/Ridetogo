@@ -1,6 +1,5 @@
 package com.example.ridetogo;
 
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +10,8 @@ import androidx.fragment.app.Fragment;
 
 public class playmusic_fragment extends Fragment {
 
-    Button playBtn, pauseBtn;
-    MediaPlayer mediaPlayer;
-    View v;
+    private Button playBtn, pauseBtn;
+    private View v;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,5 +34,4 @@ public class playmusic_fragment extends Fragment {
         });
         return v;
     }
-
 }

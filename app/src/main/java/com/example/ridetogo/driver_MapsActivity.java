@@ -64,47 +64,47 @@ import java.util.Map;
 public class driver_MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, RoutingListener {
 
     private static final int[] COLORS = new int[]{R.color.primary_dark_material_light};
-    GoogleApiClient googleApiClient;
-    Location mlocation;
-    LocationRequest location_Request;
-    GoogleMap mymap;
-    GeoFire geofire_ref_available;
-    GeoFire geofire_ref_working;
-    String userid;
-    Button logout;
-    Switch switch_Driver_on_off;
-    ConstraintLayout layout_driver_settings;
-    ConstraintLayout layout_onGoing_ride;
-    Button btn_end_ride;
+    private GoogleApiClient googleApiClient;
+    private Location mlocation;
+    private LocationRequest location_Request;
+    private GoogleMap mymap;
+    private GeoFire geofire_ref_available;
+    private GeoFire geofire_ref_working;
+    private String userid;
+    private Button logout;
+    private Switch switch_Driver_on_off;
+    private ConstraintLayout layout_driver_settings;
+    private ConstraintLayout layout_onGoing_ride;
+    private Button btn_end_ride;
 
 
     //get assigned customer vars
-    String assigned_customer_id = "";
-    Marker pickup_location_marker;
-    Marker destination_location_marker;
-    DatabaseReference customer_request_ref;
-    ValueEventListener customer_request_refListsner;
-    TextView customer_phone;
-    TextView customer_name;
-    TextView customer_destination;
-    ConstraintLayout layout_assigned_customer_info;
-    Button call_customer;
-    Button cancel_ride_request;
-    Button btn_pick_cusomer;
-    String assigned_customer_dest_name;
-    LatLng customer_lat_lng;
-    LatLng destination_lat_lng;
-    Boolean customer_picked_bol = false;
-    Long start_ride_timestamp;
-    Long end_ride_timestamp;
-    CardView my_location_button;
-    MediaPlayer mediaPlayer;
-    ValueEventListener listener_pickup;
-    Boolean zoom_first_time = false;
-    ValueEventListener music_listener;
-    DatabaseReference music_Ref;
-    ValueEventListener music_listener_pause;
-    DatabaseReference music_Ref_pause;
+    private String assigned_customer_id = "";
+    private Marker pickup_location_marker;
+    private Marker destination_location_marker;
+    private DatabaseReference customer_request_ref;
+    private ValueEventListener customer_request_refListsner;
+    private TextView customer_phone;
+    private TextView customer_name;
+    private TextView customer_destination;
+    private ConstraintLayout layout_assigned_customer_info;
+    private Button call_customer;
+    private Button cancel_ride_request;
+    private Button btn_pick_cusomer;
+    private String assigned_customer_dest_name;
+    private LatLng customer_lat_lng;
+    private LatLng destination_lat_lng;
+    private Boolean customer_picked_bol = false;
+    private Long start_ride_timestamp;
+    private Long end_ride_timestamp;
+    private CardView my_location_button;
+    private MediaPlayer mediaPlayer;
+    private ValueEventListener listener_pickup;
+    private Boolean zoom_first_time = false;
+    private ValueEventListener music_listener;
+    private DatabaseReference music_Ref;
+    private ValueEventListener music_listener_pause;
+    private DatabaseReference music_Ref_pause;
     private ActivityDriverMapsBinding binding;
     private boolean ongoing_Ride = false;
     //logout vars for handling location on logout
@@ -453,7 +453,7 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
         });
     }
 
-    public void getcustomerinfo() {
+    private void getcustomerinfo() {
         layout_driver_settings.setVisibility(View.INVISIBLE);
         layout_assigned_customer_info.setVisibility(View.VISIBLE);
         DatabaseReference customer_Ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Users").child("Riders").child(assigned_customer_id);
@@ -546,7 +546,7 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
 
     }
 
-    protected synchronized void setGoogleApiClient() {
+    private synchronized void setGoogleApiClient() {
         googleApiClient = new GoogleApiClient.Builder(driver_MapsActivity.this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)

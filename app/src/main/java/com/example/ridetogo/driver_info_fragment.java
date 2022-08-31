@@ -17,22 +17,22 @@ import com.bumptech.glide.Glide;
 public class driver_info_fragment extends Fragment {
 
     //ui vars
-    TextView txt_driver_name;
-    TextView txt_driver_phone;
-    TextView txt_driver_car;
-    TextView txt_driver_car_color;
-    TextView txt_driver_rating;
-    ImageView driver_image;
-    String image_profileurl;
-    String driver_car_color;
-    String driver_car_type;
-    String driver_phone;
-    String driver_name;
-    String driver_rating;
-    Button call_driver;
+    private TextView txt_driver_name;
+    private TextView txt_driver_phone;
+    private TextView txt_driver_car;
+    private TextView txt_driver_car_color;
+    private TextView txt_driver_rating;
+    private ImageView driver_image;
+    private String image_profileurl;
+    private String driver_car_color;
+    private String driver_car_type;
+    private String driver_phone;
+    private String driver_name;
+    private String driver_rating;
+    private Button call_driver;
 
     //get driver info in constructor
-    public driver_info_fragment(String image_profileurl, String driver_car_color, String driver_car_type, String driver_phone, String driver_name, String driver_rating) {
+    protected driver_info_fragment(String image_profileurl, String driver_car_color, String driver_car_type, String driver_phone, String driver_name, String driver_rating) {
         this.image_profileurl = image_profileurl;
         this.driver_car_color = driver_car_color;
         this.driver_car_type = driver_car_type;

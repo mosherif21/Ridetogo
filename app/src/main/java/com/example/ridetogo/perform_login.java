@@ -1,7 +1,7 @@
 package com.example.ridetogo;
 
-import static com.example.ridetogo.login.hideSoftKeyboard;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -28,14 +29,20 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 public class perform_login extends AppCompatActivity {
-    Button login;
-    EditText pass;
-    EditText email;
-    ProgressBar progressBar;
-    String full_phone_no;
-    String isdriver;
-    String child_ref;
-    FirebaseAuth mauth;
+    private Button login;
+    private EditText pass;
+    private EditText email;
+    private ProgressBar progressBar;
+    private String full_phone_no;
+    private String isdriver;
+    private String child_ref;
+    private FirebaseAuth mauth;
+
+    private static void hideSoftKeyboard(Activity activity) {
+
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

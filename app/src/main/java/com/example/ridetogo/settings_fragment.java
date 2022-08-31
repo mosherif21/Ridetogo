@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -45,26 +46,26 @@ import java.util.Map;
 
 public class settings_fragment extends Fragment {
     //GET image vars
-    final int CHOOSE_PROFILE = 1;
-    String userid;
-    String name;
-    String email;
-    String number;
-    Button btn_signout;
-    Button btn_verify_email;
-    TextView name_txt;
-    TextView email_txt;
-    TextView phone_num_text;
-    TextView email_verify_text;
-    ImageView user_image;
-    DatabaseReference customer_Ref;
-    LinearLayout layout_profileImage;
-    LinearLayout layout_name;
-    LinearLayout layout_email;
-    LinearLayout layout_password;
-    ProgressBar progressBar;
-    FirebaseUser user;
-    Uri image_uri;
+    private final int CHOOSE_PROFILE = 1;
+    private String userid;
+    private String name;
+    private String email;
+    private String number;
+    private Button btn_signout;
+    private Button btn_verify_email;
+    private TextView name_txt;
+    private TextView email_txt;
+    private TextView phone_num_text;
+    private TextView email_verify_text;
+    private ImageView user_image;
+    private DatabaseReference customer_Ref;
+    private LinearLayout layout_profileImage;
+    private LinearLayout layout_name;
+    private LinearLayout layout_email;
+    private LinearLayout layout_password;
+    private ProgressBar progressBar;
+    private FirebaseUser user;
+    private Uri image_uri;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,7 +89,8 @@ public class settings_fragment extends Fragment {
         email_verify_text = v.findViewById(R.id.email_verified_text);
         btn_verify_email = v.findViewById(R.id.btn_verify_email);
 
-
+        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         btn_verify_email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -203,7 +205,7 @@ public class settings_fragment extends Fragment {
                         String image_profileurl = datamap.get("profile_image").toString();
                         Glide.with(((home) getActivity())).load(image_profileurl).into(user_image);
                     }
-
+                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     progressBar.setVisibility(View.INVISIBLE);
                 }
             }

@@ -13,9 +13,9 @@ import com.airbnb.lottie.LottieAnimationView;
 
 
 public class onboarding_fragment5 extends Fragment {
-    TextView txt_getstarted;
-    LottieAnimationView btn_getstarted;
-    Handler handler = new Handler();
+    private TextView txt_getstarted;
+    private LottieAnimationView btn_getstarted;
+    private Handler handler = new Handler();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

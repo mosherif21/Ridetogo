@@ -41,24 +41,23 @@ import java.util.Map;
 
 public class RideHistoryPreview extends AppCompatActivity implements OnMapReadyCallback, RoutingListener {
     private static final int[] COLORS = new int[]{R.color.black};
-    GoogleMap mymap;
-    SupportMapFragment mapFragment;
-    String rideId;
-    String riderId;
-    String driverId;
-    String timeStamp;
-    LatLng destinationLatlng, pickupLatlng;
-    String destination_name;
-    DatabaseReference history_ref;
-    String userId;
+    private GoogleMap mymap;
+    private SupportMapFragment mapFragment;
+    private String rideId;
+    private String riderId;
+    private String driverId;
+    private LatLng destinationLatlng, pickupLatlng;
+    private String destination_name;
+    private DatabaseReference history_ref;
+    private String userId;
     //history vars
-    TextView txt_from_to;
-    TextView txt_price;
-    TextView txt_date;
-    TextView txt_name;
-    TextView txt_phone;
-    ImageView userImage;
-    RatingBar ratingBar;
+    private TextView txt_from_to;
+    private TextView txt_price;
+    private TextView txt_date;
+    private TextView txt_name;
+    private TextView txt_phone;
+    private ImageView userImage;
+    private RatingBar ratingBar;
     //route drawing vars
     private List<Polyline> polylines;
 

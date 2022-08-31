@@ -35,12 +35,8 @@ import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 import java.util.Arrays;
 
 public class home extends AppCompatActivity implements nav_items_adapter.OnItemSelectedListener {
-    /*
-DrawerLayout drawer;
 
-NavigationView naview;*/
-
-    static final int LOCATION_REQUEST_CODE = 10;
+    private static final int LOCATION_REQUEST_CODE = 10;
     //navigation bar variables for items selected
     private static final int frag_home = 1;
     private static final int frag_notifications = 2;
@@ -51,22 +47,22 @@ NavigationView naview;*/
     private static final int frag_Contact_us = 8;
 
     //location and network listeners
-    network_listener network_listener = new network_listener();
-    location_listener location_listener = new location_listener();
+    private network_listener network_listener = new network_listener();
+    private location_listener location_listener = new location_listener();
 
     //home fragment instance
-    Home_fragment home = new Home_fragment();
+    private Home_fragment home = new Home_fragment();
 
     //fragment manager vars
     private FragmentTransaction transaction;
-    FragmentManager manager = getSupportFragmentManager();
+    private FragmentManager manager = getSupportFragmentManager();
 
     //two container views bec home fragment contains google maps which can't be replaced with others in same fragment
-    FragmentContainerView home_container_view;
-    FragmentContainerView other_container_view;
+    private FragmentContainerView home_container_view;
+    private FragmentContainerView other_container_view;
 
     //ui vars
-    Toolbar toolbar;
+    private Toolbar toolbar;
     private RecyclerView nav_list;
     private String[] nav_titles;
     private int[] nav_icons;
@@ -165,7 +161,7 @@ NavigationView naview;*/
     }
 
     //logout function to be used by settings fragment
-    public void logout() {
+    protected void logout() {
         logout_priv();
     }
 
@@ -282,8 +278,7 @@ NavigationView naview;*/
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED && grantResults.length > 0) {
                     ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_REQUEST_CODE);
                     Toast.makeText(this, "Please accept locations permission to use the app", Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
                 }
             }
         }
@@ -313,11 +308,11 @@ NavigationView naview;*/
         super.onStop();
     }
 
-    public void play_music_req(String song_url) {
+    protected void play_music_req(String song_url) {
         home.public_play_music_Request(song_url);
     }
 
-    public void pause_music_req() {
+    protected void pause_music_req() {
         home.public_pause_music_Request();
     }
 }

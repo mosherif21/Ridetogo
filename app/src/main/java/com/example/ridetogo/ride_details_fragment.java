@@ -14,12 +14,12 @@ import androidx.fragment.app.Fragment;
 
 public class ride_details_fragment extends Fragment {
 
-    Button btn_confirm_rdetails;
-    RadioButton wasalny;
-    RadioButton wasalnyplus;
-    String ride_class = "";
-    RadioGroup radioGroup;
-    TextView txt_error;
+    private Button btn_confirm_rdetails;
+    private RadioButton wasalny;
+    private RadioButton wasalnyplus;
+    private String ride_class = "";
+    private RadioGroup radioGroup;
+    private TextView txt_error;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

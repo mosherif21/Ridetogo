@@ -82,75 +82,75 @@ import java.util.Map;
 
 public class Home_fragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, RoutingListener {
     private static final int[] COLORS = new int[]{R.color.black};
-    public boolean first_back = false;
+    protected boolean first_back = false;
     //ui or general vars
-    LottieAnimationView map_marker_pickup_point;
-    TextView dest_text;
-    TextView ride_request_progress_txt;
-    ConstraintLayout locations_rideDetails_layout;
-    ConstraintLayout ride_request_progress_layout;
-    ConstraintLayout confirm_pickup_point_layout;
-    ConstraintLayout layout_ride_ongoing;
-    LottieAnimationView set_myloc;
-    GoogleApiClient googleApiClient;
-    Location mlocation;
-    LocationRequest location_Request;
-    GoogleMap mymap;
-    GeoFire geofire;
-    String userid;
-    CardView btn_whereto;
-    FragmentTransaction transaction;
-    SupportMapFragment mapsupp;
-    SlidingUpPanelLayout panel;
-    Button btn_cancel_request;
-    ProgressBar progressBar;
-    boolean ongoing_Ride = false;
+    private LottieAnimationView map_marker_pickup_point;
+    private TextView dest_text;
+    private TextView ride_request_progress_txt;
+    private ConstraintLayout locations_rideDetails_layout;
+    private ConstraintLayout ride_request_progress_layout;
+    private ConstraintLayout confirm_pickup_point_layout;
+    private ConstraintLayout layout_ride_ongoing;
+    private LottieAnimationView set_myloc;
+    private GoogleApiClient googleApiClient;
+    private Location mlocation;
+    private LocationRequest location_Request;
+    private GoogleMap mymap;
+    private GeoFire geofire;
+    private String userid;
+    private CardView btn_whereto;
+    private FragmentTransaction transaction;
+    private SupportMapFragment mapsupp;
+    private SlidingUpPanelLayout panel;
+    private Button btn_cancel_request;
+    private ProgressBar progressBar;
+    private boolean ongoing_Ride = false;
     //ride request vars
-    String cust_id;
-    LatLng pickupLocation;
-    LatLng pickup_made_request_latlng = null;
-    LatLng destination_location_latlng;
-    Marker driver_loc_marker;
-    Marker pickup_point_marker;
-    GeoQuery geoQuery1;
-    DatabaseReference driver_loc;
-    ValueEventListener driver_locListener;
-    boolean request_bol = false;
-    String destination_of_ride_request_chosen_name;
-    Button btn_confirm_pickup_point;
-    Button btn_ride_details;
-    String driver_liscense_plate;
-    String driver_name;
-    String driver_phone;
-    String driver_car_type;
-    String driver_car_color;
-    LatLng driver_latlng;
-    EditText confirm_pickup_point_txt;
-    String driver_class;
-    LatLng confirmed_pickup_latlng;
-    Button btn_driver_info;
-    LottieAnimationView search_driver_anim;
-    Button btn_call_help;
-    int routePickupOrpickuppoint = 0;
-    Marker chosen_destination_marker;
-    int back_state = 0;
-    boolean pickup_point_bool = false;
+    private String cust_id;
+    private LatLng pickupLocation;
+    private LatLng pickup_made_request_latlng = null;
+    private LatLng destination_location_latlng;
+    private Marker driver_loc_marker;
+    private Marker pickup_point_marker;
+    private GeoQuery geoQuery1;
+    private DatabaseReference driver_loc;
+    private ValueEventListener driver_locListener;
+    private boolean request_bol = false;
+    private String destination_of_ride_request_chosen_name;
+    private Button btn_confirm_pickup_point;
+    private Button btn_ride_details;
+    private String driver_liscense_plate;
+    private String driver_name;
+    private String driver_phone;
+    private String driver_car_type;
+    private String driver_car_color;
+    private LatLng driver_latlng;
+    private EditText confirm_pickup_point_txt;
+    private String driver_class;
+    private LatLng confirmed_pickup_latlng;
+    private Button btn_driver_info;
+    private LottieAnimationView search_driver_anim;
+    private Button btn_call_help;
+    private int routePickupOrpickuppoint = 0;
+    private Marker chosen_destination_marker;
+    private int back_state = 0;
+    private boolean pickup_point_bool = false;
     //notification
-    int notificationId = 20;
-    NotificationCompat.Builder builder;
-    NotificationManagerCompat notificationManager;
-    View v;
-    ValueEventListener listener_pickup;
-    boolean notify_once = false;
-    boolean notify_once3 = false;
-    boolean notify_once2 = false;
-    DatabaseReference driver_ref;
-    ValueEventListener driver_listener;
-    ValueEventListener listener;
-    String average_driver_rating;
-    String image_profileurl;
-    Boolean zoom_first_time = false;
-    boolean bol_zoom_onDriver = false;
+    private int notificationId = 20;
+    private NotificationCompat.Builder builder;
+    private NotificationManagerCompat notificationManager;
+    private View v;
+    private ValueEventListener listener_pickup;
+    private boolean notify_once = false;
+    private boolean notify_once3 = false;
+    private boolean notify_once2 = false;
+    private DatabaseReference driver_ref;
+    private ValueEventListener driver_listener;
+    private ValueEventListener listener;
+    private String average_driver_rating;
+    private String image_profileurl;
+    private Boolean zoom_first_time = false;
+    private boolean bol_zoom_onDriver = false;
     private int radius = 1;
     private boolean FoundDriver = false;
     private String FoundDriver_uid;
@@ -245,7 +245,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
         return v;
     }
 
-    public void back_key() {
+    protected void back_key() {
         if (!first_back) {
             back_key_apply();
             first_back = true;
@@ -322,7 +322,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
 
     }
 
-    public void close_ride_location(String destination, LatLng adestination_latlng) {
+    protected void close_ride_location(String destination, LatLng adestination_latlng) {
         if (panel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
             panel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         }
@@ -367,7 +367,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
         }
     }
 
-    public void confirm_ride_details(String drive_class) {
+    protected void confirm_ride_details(String drive_class) {
         driver_class = drive_class;
         if (panel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
             panel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
@@ -432,7 +432,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
         });
     }
 
-    public void request_ride(String ride_class) {
+    private void request_ride(String ride_class) {
         if (!request_bol) {
             back_state = 0;
             request_bol = true;
@@ -1308,7 +1308,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
         }
     }
 
-    public void public_play_music_Request(String song_url) {
+    protected void public_play_music_Request(String song_url) {
         send_music_play_request(song_url);
     }
 
@@ -1319,7 +1319,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
         }
     }
 
-    public void public_pause_music_Request() {
+    protected void public_pause_music_Request() {
         send_music_pause_request();
     }
 }

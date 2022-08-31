@@ -17,12 +17,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class password_change_activity extends AppCompatActivity {
-    FirebaseUser user;
+    private FirebaseUser user;
 
-    Button btn_password_save;
-    EditText old_password;
-    EditText new_password;
-    TextView password_error;
+    private Button btn_password_save;
+    private EditText old_password;
+    private EditText new_password;
+    private TextView password_error;
 
 
     @Override

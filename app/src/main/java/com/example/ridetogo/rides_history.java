@@ -29,12 +29,12 @@ import java.util.Locale;
 
 public class rides_history extends Fragment {
 
-    RecyclerView history_recycler_view;
-    RecyclerView.Adapter ride_history_adapter;
-    RecyclerView.LayoutManager ride_history_manager;
-    ArrayList RideHistory = new ArrayList<RideHistoryObject>();
-    ProgressBar progressBar;
-    TextView txt_previous;
+    private RecyclerView history_recycler_view;
+    private RecyclerView.Adapter ride_history_adapter;
+    private RecyclerView.LayoutManager ride_history_manager;
+    private ArrayList RideHistory = new ArrayList<RideHistoryObject>();
+    private ProgressBar progressBar;
+    private TextView txt_previous;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -115,7 +115,7 @@ public class rides_history extends Fragment {
         return date;
     }
 
-    ArrayList<RideHistoryObject> getDataHistory() {
+    private ArrayList<RideHistoryObject> getDataHistory() {
         return RideHistory;
     }
 }

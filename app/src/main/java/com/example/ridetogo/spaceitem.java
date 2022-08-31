@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 public class spaceitem extends navitem<spaceitem.ViewHolder> {
     private int spacedp;
 
-    public spaceitem(int spacedp) {
+    protected spaceitem(int spacedp) {
         this.spacedp = spacedp;
     }
 
@@ -34,7 +34,7 @@ public class spaceitem extends navitem<spaceitem.ViewHolder> {
 
     }
 
-    public class ViewHolder extends nav_items_adapter.ViewHolder {
+    protected class ViewHolder extends nav_items_adapter.ViewHolder {
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

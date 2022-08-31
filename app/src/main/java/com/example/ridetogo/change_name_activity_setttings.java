@@ -13,12 +13,12 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class change_name_activity_setttings extends AppCompatActivity {
     //firebase vars
-    DatabaseReference customer_Ref;
-    String userid;
+    private DatabaseReference customer_Ref;
+    private String userid;
 
     //ui vars
-    EditText name;
-    Button btn_save;
+    private EditText name;
+    private Button btn_save;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

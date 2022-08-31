@@ -20,15 +20,15 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class change_email_activity extends AppCompatActivity {
     //firebase variables
-    FirebaseUser user;
-    DatabaseReference customer_Ref;
-    String userid;
+    private FirebaseUser user;
+    private DatabaseReference customer_Ref;
+    private String userid;
 
     //ui vars
-    EditText email_editor;
-    EditText pass_editor;
-    Button btn_save;
-    TextView email_error;
+    private EditText email_editor;
+    private EditText pass_editor;
+    private Button btn_save;
+    private TextView email_error;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

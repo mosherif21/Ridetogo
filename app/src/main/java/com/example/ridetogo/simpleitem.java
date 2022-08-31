@@ -53,18 +53,18 @@ public class simpleitem extends navitem<simpleitem.ViewHolder> {
 
     }
 
-    public simpleitem applyselectedtexttint(int selectedtexttint) {
+    protected simpleitem applyselectedtexttint(int selectedtexttint) {
         this.selectedtexttint = selectedtexttint;
         return this;
     }
 
-    public simpleitem texttint(int regulartexttint) {
+    protected simpleitem texttint(int regulartexttint) {
         this.regulartexttint = regulartexttint;
         return this;
     }
 
 
-    static class ViewHolder extends nav_items_adapter.ViewHolder {
+    protected static class ViewHolder extends nav_items_adapter.ViewHolder {
         private LottieAnimationView icon;
         private TextView title;
 

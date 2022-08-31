@@ -27,15 +27,16 @@ import com.hbb20.CountryCodePicker;
 
 public class login extends AppCompatActivity {
     //ui vars
-    CountryCodePicker country_code;
-    EditText phone_num;
-    Button btn_continue;
-    ProgressBar progressBar;
+    private CountryCodePicker country_code;
+    private EditText phone_num;
+    private Button btn_continue;
+    private ProgressBar progressBar;
 
     //network listener
-    network_listener network_listener = new network_listener();
+    private network_listener network_listener = new network_listener();
 
-    public static void hideSoftKeyboard(Activity activity) {
+    //hide keyboard function
+    private static void hideSoftKeyboard(Activity activity) {
 
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);

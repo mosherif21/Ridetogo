@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 
 public class onboarding_fragment3 extends Fragment {
 
-    TextView skip;
+    private TextView skip;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

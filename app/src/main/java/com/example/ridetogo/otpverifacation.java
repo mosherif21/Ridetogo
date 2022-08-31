@@ -37,18 +37,18 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import java.util.concurrent.TimeUnit;
 
 public class otpverifacation extends AppCompatActivity {
-    static CountDownTimer timer1;
-    TextView otp_inst;
-    TextView txt_timer;
-    TextView txt_wrong_number;
-    PinView pin_entered;
-    Button btn_verify;
-    Button btn_resend;
-    ProgressBar progressBar;
-    network_listener network_listener = new network_listener();
-    String code_from_system;
-    LottieAnimationView timer_icon;
-    String phone_no;
+
+    private TextView otp_inst;
+    private TextView txt_timer;
+    private TextView txt_wrong_number;
+    private PinView pin_entered;
+    private Button btn_verify;
+    private Button btn_resend;
+    private ProgressBar progressBar;
+    private network_listener network_listener = new network_listener();
+    private String code_from_system;
+    private LottieAnimationView timer_icon;
+    private String phone_no;
     private FirebaseAuth mAuth;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         @Override

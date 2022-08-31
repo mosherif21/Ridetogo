@@ -20,18 +20,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class signup extends AppCompatActivity {
-    FirebaseAuth mauth;
-    EditText txt_name;
-    EditText txt_email;
-    EditText txt_pass;
-    TextView email_error_txt;
-    TextView name_error_txt;
-    TextView pass_error_txt;
-    Button txt_btn_signup;
-    boolean email_confirm;
-    boolean pass_confirm;
-    boolean name_confirm;
-    ProgressBar progressBar;
+    private FirebaseAuth mauth;
+    private EditText txt_name;
+    private EditText txt_email;
+    private EditText txt_pass;
+    private TextView email_error_txt;
+    private TextView name_error_txt;
+    private TextView pass_error_txt;
+    private Button txt_btn_signup;
+    private boolean email_confirm;
+    private boolean pass_confirm;
+    private boolean name_confirm;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -19,7 +19,7 @@ public class nav_items_adapter extends RecyclerView.Adapter<nav_items_adapter.Vi
     private OnItemSelectedListener listener;
 
 
-    public nav_items_adapter(List<navitem> items) {
+    protected nav_items_adapter(List<navitem> items) {
         this.navitems = items;
         this.naviewstypes = new HashMap<>();
         this.viewholder_factory = new SparseArray<>();
@@ -47,7 +47,7 @@ public class nav_items_adapter extends RecyclerView.Adapter<nav_items_adapter.Vi
         }
     }
 
-    public void setSelected(int position) {
+    protected void setSelected(int position) {
         navitem checked = navitems.get(position);
         if (!checked.isSelectable()) {
             return;
@@ -70,7 +70,7 @@ public class nav_items_adapter extends RecyclerView.Adapter<nav_items_adapter.Vi
         }
     }
 
-    public void setListener(OnItemSelectedListener listener) {
+    protected void setListener(OnItemSelectedListener listener) {
         this.listener = listener;
     }
 
@@ -89,11 +89,11 @@ public class nav_items_adapter extends RecyclerView.Adapter<nav_items_adapter.Vi
         return naviewstypes.get(navitems.get(position).getClass());
     }
 
-    public interface OnItemSelectedListener {
+    protected interface OnItemSelectedListener {
         void onItemSelected(int position);
     }
 
-    static abstract class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    protected static abstract class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private nav_items_adapter drawerAdapter;
 
         public ViewHolder(@NonNull View itemView) {

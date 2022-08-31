@@ -14,8 +14,8 @@ import com.airbnb.lottie.LottieAnimationView;
 
 public class onboard_fragment1 extends Fragment {
 
-    LottieAnimationView animation;
-    TextView skip;
+    private LottieAnimationView animation;
+    private TextView skip;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

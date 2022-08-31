@@ -10,12 +10,10 @@ import android.view.View;
 import android.widget.Button;
 
 public class location_listener extends BroadcastReceiver {
-
-
     @Override
     public void onReceive(Context context, Intent intent) {
         if (!gps_connection.locationTurnedOn(context)) {
-            if(gps_connection.locationTurnedOn(context))
+            if (gps_connection.locationTurnedOn(context))
                 return;
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             View no_internet_layout = LayoutInflater.from(context).inflate(R.layout.no_location_dialogue, null);
