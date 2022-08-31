@@ -65,9 +65,9 @@ public class MainActivity extends AppCompatActivity {
             }
                 else{
                     ViewPager viewpager;
-                    backimg.animate().translationY(2500).setStartDelay(2500).setDuration(500);
-                    logo.animate().translationY(2500).setStartDelay(2500).setDuration(500);
-                    animation_lot.animate().translationY(2500).setStartDelay(2500).setDuration(500);
+                    backimg.animate().translationY(2200).setStartDelay(2500).setDuration(500);
+                    logo.animate().translationY(2200).setStartDelay(2500).setDuration(500);
+                    animation_lot.animate().translationY(2200).setStartDelay(2500).setDuration(500);
                     Animation splash_animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in_anim);
                     splash_animation.setStartOffset(2500);
                     adapter = new boarding_page_adapter(getSupportFragmentManager());

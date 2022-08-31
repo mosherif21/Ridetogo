@@ -81,7 +81,6 @@ public class home extends AppCompatActivity implements nav_items_adapter.OnItemS
         other_container_view = findViewById(R.id.fragment_other_fragments);
         other_container_view.setVisibility(View.INVISIBLE);
         toolbar = findViewById(R.id.home_toolbar);
-        nav_list = findViewById(R.id.nav_items_list);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         //check if app has location permission if not request it
@@ -117,6 +116,7 @@ public class home extends AppCompatActivity implements nav_items_adapter.OnItemS
                 nav(frag_Contact_us)
         ));
         adapter.setListener(this);
+        nav_list = findViewById(R.id.nav_items_list);
         nav_list.setNestedScrollingEnabled(false);
         nav_list.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         nav_list.setAdapter(adapter);
