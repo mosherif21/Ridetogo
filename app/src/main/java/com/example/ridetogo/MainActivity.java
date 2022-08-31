@@ -31,7 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 public class MainActivity extends AppCompatActivity {
     //ui vars
     private ImageView logo, backimg;
-    private LottieAnimationView animation;
+    private LottieAnimationView animation_lot;
     private boarding_page_adapter adapter;
     private SharedPreferences shpref;
 
@@ -45,47 +45,59 @@ public class MainActivity extends AppCompatActivity {
         //link ui vars
         logo = findViewById(R.id.splash_logo);
         backimg = findViewById(R.id.splash_back);
-        animation = findViewById(R.id.splash_animation);
+        animation_lot = findViewById(R.id.splash_animation);
 
         //logo animation initialize
         Animation anima = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in_anim);
         anima.setStartOffset(1000);
+        anima.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                //check if app intro was skipped or viewed from shared preferences if not start intro
+                shpref = getSharedPreferences("MyPrefsFile", 0);
+                if (!shpref.getBoolean("skip_intro", true)) {
+                launch();
+            }
+                else{
+                    ViewPager viewpager;
+                    backimg.animate().translationY(2500).setStartDelay(2500).setDuration(500);
+                    logo.animate().translationY(2500).setStartDelay(2500).setDuration(500);
+                    animation_lot.animate().translationY(2500).setStartDelay(2500).setDuration(500);
+                    Animation splash_animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in_anim);
+                    splash_animation.setStartOffset(2500);
+                    adapter = new boarding_page_adapter(getSupportFragmentManager());
+                    viewpager = findViewById(R.id.splash_viewpager);
+                    viewpager.setAdapter(adapter);
+                    viewpager.setAnimation(splash_animation);
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
         logo.setAnimation(anima);
+
 
         //firebase authentication initialize
         FirebaseApp.initializeApp(this);
         FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
         firebaseAppCheck.installAppCheckProviderFactory(SafetyNetAppCheckProviderFactory.getInstance());
 
-        //check if app intro was skipped or viewed from shared preferences if not start intro
-        shpref = getSharedPreferences("MyPrefsFile", 0);
-        if (shpref.getBoolean("skip_intro", true)) {
-            ViewPager viewpager;
-            backimg.animate().translationY(1800).setStartDelay(2850).setDuration(500);
-            logo.animate().translationY(1800).setStartDelay(2850).setDuration(500);
-            animation.animate().translationY(1800).setStartDelay(2850).setDuration(500);
-            Animation splash_animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in_anim);
-            splash_animation.setStartOffset(2800);
-            adapter = new boarding_page_adapter(getSupportFragmentManager());
-            viewpager = findViewById(R.id.splash_viewpager);
-            viewpager.setAdapter(adapter);
-            viewpager.setAnimation(splash_animation);
-        } else {
-            //intro was viewed before launch app
 
-            launch();
-        }
+
     }
 
     //function to skip intro from on boarding fragments
-    protected void skip_intro(int skip) {
+    protected void skip_intro() {
         shpref.edit().putBoolean("skip_intro", false).apply();
-        if (skip == 1) {
             launch();
-        } else {
-
-            launch();
-        }
     }
 
     private void launch() {
@@ -100,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     backimg.animate().translationY(1800);
                     logo.animate().translationY(1800);
-                    animation.animate().translationY(1800);
+                    animation_lot.animate().translationY(1800);
                     if (snapshot.exists()) {
                         Intent intent = new Intent(MainActivity.this, home.class);
                         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));

@@ -20,7 +20,7 @@ public class onboarding_fragment4 extends Fragment {
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) getActivity()).skip_intro(1);
+                ((MainActivity) getActivity()).skip_intro();
             }
         });
         return v;

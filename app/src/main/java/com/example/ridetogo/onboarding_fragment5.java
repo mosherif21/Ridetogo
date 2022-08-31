@@ -1,5 +1,6 @@
 package com.example.ridetogo;
 
+import android.animation.Animator;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -29,14 +30,29 @@ public class onboarding_fragment5 extends Fragment {
             public void onClick(View v) {
                 btn_getstarted.playAnimation();
                 btn_getstarted.setClickable(false);
-
-                handler.postDelayed(new Runnable() {
+                txt_getstarted.setVisibility(View.GONE);
+                btn_getstarted.addAnimatorListener(new Animator.AnimatorListener() {
                     @Override
-                    public void run() {
-                        txt_getstarted.setVisibility(View.GONE);
+                    public void onAnimationStart(Animator animation) {
+
                     }
-                }, 600);
-                ((MainActivity) getActivity()).skip_intro(0);
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        ((MainActivity) getActivity()).skip_intro();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+
             }
         });
 
