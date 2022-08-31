@@ -1,6 +1,5 @@
 package com.example.ridetogo;
 
-import android.animation.Animator;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -34,33 +33,36 @@ public class MainActivity extends AppCompatActivity {
     private ImageView logo, backimg;
     private LottieAnimationView animation;
     private boarding_page_adapter adapter;
-    private Animator.AnimatorListener anim_listener;
-
+    private SharedPreferences shpref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
         setContentView(R.layout.activity_splash_screen);
+        getSupportActionBar().hide();
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+        //link ui vars
         logo = findViewById(R.id.splash_logo);
         backimg = findViewById(R.id.splash_back);
         animation = findViewById(R.id.splash_animation);
+
+        //logo animation initialize
         Animation anima = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in_anim);
         anima.setStartOffset(1000);
         logo.setAnimation(anima);
-        FirebaseApp.initializeApp(/*context=*/ this);
-        FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
-        firebaseAppCheck.installAppCheckProviderFactory(
-                SafetyNetAppCheckProviderFactory.getInstance());
 
-        startService(new Intent(MainActivity.this, onAppKilled.class));
-        SharedPreferences shpref = getSharedPreferences("MyPrefsFile", 0);
+        //firebase authentication initialize
+        FirebaseApp.initializeApp(this);
+        FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
+        firebaseAppCheck.installAppCheckProviderFactory(SafetyNetAppCheckProviderFactory.getInstance());
+
+        //check if app intro was skipped or viewed from shared preferences if not start intro
+        shpref = getSharedPreferences("MyPrefsFile", 0);
         if (shpref.getBoolean("skip_intro", true)) {
             ViewPager viewpager;
             backimg.animate().translationY(1800).setStartDelay(2850).setDuration(500);
             logo.animate().translationY(1800).setStartDelay(2850).setDuration(500);
-            logo.animate().setListener(anim_listener);
             animation.animate().translationY(1800).setStartDelay(2850).setDuration(500);
             Animation splash_animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in_anim);
             splash_animation.setStartOffset(2800);
@@ -69,33 +71,28 @@ public class MainActivity extends AppCompatActivity {
             viewpager.setAdapter(adapter);
             viewpager.setAnimation(splash_animation);
         } else {
+            //intro was viewed before launch app
 
             launch();
-
-
         }
-
-
     }
 
+    //function to skip intro from on boarding fragments
     protected void skip_intro(int skip) {
-
-        SharedPreferences shpref = getSharedPreferences("MyPrefsFile", 0);
         shpref.edit().putBoolean("skip_intro", false).apply();
         if (skip == 1) {
             launch();
         } else {
 
-
             launch();
-
         }
-
     }
 
     private void launch() {
+        //check if there is a user logged in
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
+            //check if the user logged in is a driver or a rider and launch the corresponding activity
             Query checkuser_exists = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").
                     getReference("Users").child("Riders").orderByChild("Email").equalTo(user.getEmail());
             checkuser_exists.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -120,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         } else {
-
+            //if there is no user logged in go to login activity
             Intent intent = new Intent(MainActivity.this, login.class);
             startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
             finish();

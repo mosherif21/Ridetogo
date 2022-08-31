@@ -118,6 +118,10 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
         super.onCreate(savedInstanceState);
         binding = ActivityDriverMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        //service when app killed driver is not available
+        startService(new Intent(driver_MapsActivity.this, onAppKilled.class));
+
         polylines = new ArrayList<>();
         switch_Driver_on_off = findViewById(R.id.switch_driver_onOFF);
         customer_phone = findViewById(R.id.customer_phone_indriver);
