@@ -47,15 +47,15 @@ public class home extends AppCompatActivity implements nav_items_adapter.OnItemS
     private static final int frag_Contact_us = 8;
 
     //location and network listeners
-    private network_listener network_listener = new network_listener();
-    private location_listener location_listener = new location_listener();
+    private network_listener network_listener ;
+    private location_listener location_listener;
 
     //home fragment instance
     private Home_fragment home = new Home_fragment();
 
     //fragment manager vars
     private FragmentTransaction transaction;
-    private FragmentManager manager = getSupportFragmentManager();
+    private FragmentManager manager;
 
     //two container views bec home fragment contains google maps which can't be replaced with others in same fragment
     private FragmentContainerView home_container_view;
@@ -82,6 +82,11 @@ public class home extends AppCompatActivity implements nav_items_adapter.OnItemS
         other_container_view.setVisibility(View.INVISIBLE);
         toolbar = findViewById(R.id.home_toolbar);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        manager = getSupportFragmentManager();
+
+        //listeners initialize
+        location_listener = new location_listener();
+        network_listener = new network_listener();
 
         //check if app has location permission if not request it
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -249,6 +254,7 @@ public class home extends AppCompatActivity implements nav_items_adapter.OnItemS
         transaction.commit();
     }
 
+    //if location services is not turned on launch listener popup
     private void loc() {
         if (!gps_connection.locationTurnedOn(this)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -275,10 +281,11 @@ public class home extends AppCompatActivity implements nav_items_adapter.OnItemS
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case LOCATION_REQUEST_CODE: {
-                if (grantResults[0] != PackageManager.PERMISSION_GRANTED && grantResults.length > 0) {
-                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_REQUEST_CODE);
+                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_REQUEST_CODE);
+
                     Toast.makeText(this, "Please accept locations permission to use the app", Toast.LENGTH_SHORT).show();
-                } else {
                 }
             }
         }
@@ -307,7 +314,7 @@ public class home extends AppCompatActivity implements nav_items_adapter.OnItemS
         unregisterReceiver(location_listener);
         super.onStop();
     }
-
+    //2 following functions to invoke play and pause music from music fragment to home fragment
     protected void play_music_req(String song_url) {
         home.public_play_music_Request(song_url);
     }
