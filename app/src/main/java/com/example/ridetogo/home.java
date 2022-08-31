@@ -37,6 +37,7 @@ import java.util.Arrays;
 public class home extends AppCompatActivity implements nav_items_adapter.OnItemSelectedListener {
 
     private static final int LOCATION_REQUEST_CODE = 10;
+
     //navigation bar variables for items selected
     private static final int frag_home = 1;
     private static final int frag_notifications = 2;
@@ -47,7 +48,7 @@ public class home extends AppCompatActivity implements nav_items_adapter.OnItemS
     private static final int frag_Contact_us = 8;
 
     //location and network listeners
-    private network_listener network_listener ;
+    private network_listener network_listener;
     private location_listener location_listener;
 
     //home fragment instance
@@ -314,6 +315,7 @@ public class home extends AppCompatActivity implements nav_items_adapter.OnItemS
         unregisterReceiver(location_listener);
         super.onStop();
     }
+
     //2 following functions to invoke play and pause music from music fragment to home fragment
     protected void play_music_req(String song_url) {
         home.public_play_music_Request(song_url);

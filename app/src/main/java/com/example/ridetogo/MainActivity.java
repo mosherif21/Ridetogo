@@ -61,9 +61,8 @@ public class MainActivity extends AppCompatActivity {
                 //check if app intro was skipped or viewed from shared preferences if not start intro
                 shpref = getSharedPreferences("MyPrefsFile", 0);
                 if (!shpref.getBoolean("skip_intro", true)) {
-                launch();
-            }
-                else{
+                    launch();
+                } else {
                     ViewPager viewpager;
                     backimg.animate().translationY(2500).setStartDelay(2500).setDuration(500);
                     logo.animate().translationY(2500).setStartDelay(2500).setDuration(500);
@@ -91,13 +90,12 @@ public class MainActivity extends AppCompatActivity {
         firebaseAppCheck.installAppCheckProviderFactory(SafetyNetAppCheckProviderFactory.getInstance());
 
 
-
     }
 
     //function to skip intro from on boarding fragments
     protected void skip_intro() {
         shpref.edit().putBoolean("skip_intro", false).apply();
-            launch();
+        launch();
     }
 
     private void launch() {
