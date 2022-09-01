@@ -29,12 +29,13 @@ import com.google.firebase.database.ValueEventListener;
 
 
 public class MainActivity extends AppCompatActivity {
-    protected static onboard_fragment1 onboard_fragment1_instance;
+
     //ui vars
     private ImageView logo, backimg;
     private LottieAnimationView animation_lot;
     private boarding_page_adapter adapter;
     private SharedPreferences shpref;
+    protected static onboard_fragment1 onboard_fragment1_instance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
