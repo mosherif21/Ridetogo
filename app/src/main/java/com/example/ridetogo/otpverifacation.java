@@ -38,6 +38,7 @@ import java.util.concurrent.TimeUnit;
 
 public class otpverifacation extends AppCompatActivity {
 
+    //ui vars
     private TextView otp_inst;
     private TextView txt_timer;
     private TextView txt_wrong_number;
@@ -45,41 +46,30 @@ public class otpverifacation extends AppCompatActivity {
     private Button btn_verify;
     private Button btn_resend;
     private ProgressBar progressBar;
-    private network_listener network_listener = new network_listener();
     private String code_from_system;
     private LottieAnimationView timer_icon;
     private String phone_no;
+
+    //network listener var
+    private network_listener network_listener;
+
+    //firebase authentication vars
     private FirebaseAuth mAuth;
-    private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-        @Override
-        public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-            super.onCodeSent(s, forceResendingToken);
-            code_from_system = s;
-        }
 
-        @Override
-        public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
-            String code = phoneAuthCredential.getSmsCode();
-            if (code != null) {
-                pin_entered.setText(code);
-                verify_otp_code(code);
 
-            } else
-                Toast.makeText(otpverifacation.this, "code is not null", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onVerificationFailed(@NonNull FirebaseException e) {
-            Toast.makeText(otpverifacation.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    };
+    private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_otpverifacation);
         getSupportActionBar().hide();
+
+        //network listener initialize
         com.example.ridetogo.Listeners.network_listener.updateActivity(this, 1);
+        network_listener = new network_listener();
+
+        //ui vars link
         phone_no = getIntent().getStringExtra("phone_no");
         otp_inst = findViewById(R.id.otp_text_inst);
         txt_timer = findViewById(R.id.txt_timer);
@@ -92,21 +82,56 @@ public class otpverifacation extends AppCompatActivity {
         progressBar = findViewById(R.id.otp_progressbar);
         btn_verify.setClickable(false);
         otp_inst.setText("Please enter one time OTP code sent to\n" + phone_no);
+
+
+        //firebase authentication initialize
         FirebaseApp.initializeApp(/*context=*/ this);
         FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
         firebaseAppCheck.installAppCheckProviderFactory(
                 SafetyNetAppCheckProviderFactory.getInstance());
         mAuth = FirebaseAuth.getInstance();
 
-        //  mAuth.getFirebaseAuthSettings().setAppVerificationDisabledForTesting(true);
+        //after otp code sent call back listener can listen to sms sent to same device and automatically verify otp
+        mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+            @Override
+            public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                super.onCodeSent(s, forceResendingToken);
+                //get code from system if otp sent successfully to compare with code read from system
+                code_from_system = s;
+            }
+
+            @Override
+            public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
+                //this gets code sent to device
+                String code = phoneAuthCredential.getSmsCode();
+                if (code != null) {
+                    pin_entered.setText(code);
+                    verify_otp_code(code);
+
+                } else
+                    Toast.makeText(otpverifacation.this, "code is not null", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onVerificationFailed(@NonNull FirebaseException e) {
+                //send failed
+                Toast.makeText(otpverifacation.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        //send otp code function
         sendotp_code(phone_no);
+
+        //timer that counts down 60 seconds before otp resend
         CountDownTimer timer1 = new CountDownTimer(60000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
+                //update seconds text every second
                 txt_timer.setText("" + millisUntilFinished / 1000 + "s");
                 if (millisUntilFinished / 1000 == 5) {
                     txt_timer.setTextColor(Color.RED);
                 }
+                //after 5 seconds at second 55 make wrong number textview visible if user wants to change number
                 if (millisUntilFinished / 1000 == 55) {
                     txt_wrong_number.setVisibility(View.VISIBLE);
                 }
@@ -114,6 +139,7 @@ public class otpverifacation extends AppCompatActivity {
 
             @Override
             public void onFinish() {
+                //after counter counts 60 seconds make otp enter not available and otp resend button visible
                 pin_entered.setEnabled(false);
                 timer_icon.pauseAnimation();
                 timer_icon.setProgress(0f);
@@ -131,6 +157,8 @@ public class otpverifacation extends AppCompatActivity {
                 });
             }
         }.start();
+
+        //
         pin_entered.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -169,15 +197,16 @@ public class otpverifacation extends AppCompatActivity {
             }
         });
 
+        //if user clicks on textview number finish activity which gets user back to login activity
         txt_wrong_number.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 finish();
             }
         });
     }
 
+    //send otp code number function
     private void sendotp_code(String phone_no) {
         PhoneAuthOptions options =
                 PhoneAuthOptions.newBuilder(mAuth)
@@ -189,18 +218,20 @@ public class otpverifacation extends AppCompatActivity {
         PhoneAuthProvider.verifyPhoneNumber(options);
     }
 
+    //verify otp function
     private void verify_otp_code(String code) {
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(code_from_system, code);
         signInWithPhoneAuthCredential(credential);
     }
 
+    //sign in with phone authorization credential to check it otp is valid
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-
+                            //otp is valid go to signup activity
                             progressBar.setVisibility(View.INVISIBLE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             FirebaseAuth mauth = FirebaseAuth.getInstance();
@@ -210,6 +241,7 @@ public class otpverifacation extends AppCompatActivity {
                             startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                             finish();
                         } else {
+                            //otp is invalid
                             progressBar.setVisibility(View.INVISIBLE);
                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
@@ -222,6 +254,7 @@ public class otpverifacation extends AppCompatActivity {
 
     @Override
     protected void onStart() {
+        //register network listener
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(network_listener, filter);
         super.onStart();
@@ -229,6 +262,7 @@ public class otpverifacation extends AppCompatActivity {
 
     @Override
     protected void onStop() {
+        //unregister network listener
         unregisterReceiver(network_listener);
         super.onStop();
     }

@@ -18,7 +18,7 @@ public class onAppKilled extends Service {
     public IBinder onBind(Intent intent) {
         return null;
     }
-
+    //this service will used to remove driver as available if he exits or stops app
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);

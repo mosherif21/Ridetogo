@@ -1,7 +1,6 @@
 package com.example.ridetogo;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,7 @@ import com.airbnb.lottie.LottieAnimationView;
 
 public class onboard_fragment1 extends Fragment {
 
+    //on boarding fragment from 1 to 5 is just an intro with animation and each one contains a skip button
     private LottieAnimationView animation;
     private TextView skip;
 
@@ -24,14 +24,6 @@ public class onboard_fragment1 extends Fragment {
         animation = v.findViewById(R.id.splash_animation1);
         animation.pauseAnimation();
 
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                animation.playAnimation();
-            }
-        }, 3000);
-
         skip = v.findViewById(R.id.frag1_skip_btn);
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,5 +33,10 @@ public class onboard_fragment1 extends Fragment {
         });
 
         return v;
+    }
+
+    protected void playAnimation() {
+        if (animation != null)
+            animation.playAnimation();
     }
 }

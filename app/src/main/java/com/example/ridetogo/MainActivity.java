@@ -29,6 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 
 
 public class MainActivity extends AppCompatActivity {
+    protected static onboard_fragment1 onboard_fragment1_instance;
     //ui vars
     private ImageView logo, backimg;
     private LottieAnimationView animation_lot;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         logo = findViewById(R.id.splash_logo);
         backimg = findViewById(R.id.splash_back);
         animation_lot = findViewById(R.id.splash_animation);
+        onboard_fragment1_instance = new onboard_fragment1();
 
         //logo animation initialize
         Animation anima = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in_anim);
@@ -73,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
                     viewpager = findViewById(R.id.splash_viewpager);
                     viewpager.setAdapter(adapter);
                     viewpager.setAnimation(splash_animation);
+                    onboard_fragment1_instance.playAnimation();
                 }
             }
 
@@ -150,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new onboard_fragment1();
+                    return MainActivity.onboard_fragment1_instance;
                 case 1:
                     return new onboarding_fragment2();
                 case 2:
