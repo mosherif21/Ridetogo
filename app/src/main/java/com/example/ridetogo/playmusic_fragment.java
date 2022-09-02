@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 
 public class playmusic_fragment extends Fragment {
 
+    //ui vars
     private Button playBtn, pauseBtn;
     private View v;
 
@@ -17,8 +18,12 @@ public class playmusic_fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_playmusic_fragment, container, false);
+
+        //link ui vars
         playBtn = v.findViewById(R.id.BtnPlay);
         pauseBtn = v.findViewById(R.id.BtnPause);
+
+        //play button call play music request function in home
         playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -26,6 +31,7 @@ public class playmusic_fragment extends Fragment {
             }
         });
 
+        //pause button call pause music request function in home
         pauseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

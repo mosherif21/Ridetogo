@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 
 public class ride_details_fragment extends Fragment {
 
+    //ui vars
     private Button btn_confirm_rdetails;
     private RadioButton wasalny;
     private RadioButton wasalnyplus;
@@ -22,28 +23,28 @@ public class ride_details_fragment extends Fragment {
     private TextView txt_error;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_ride_details_fragment, container, false);
+
+        //link ui vars
         radioGroup = v.findViewById(R.id.radio_group_ride_details);
         btn_confirm_rdetails = v.findViewById(R.id.btn_confirm_ride_details);
         wasalny = v.findViewById(R.id.wasalny_rd);
         wasalnyplus = v.findViewById(R.id.wasalnyplus_rd);
         txt_error = v.findViewById(R.id.txt_ride_class_error);
         txt_error.setVisibility(View.INVISIBLE);
+
+        //confirm ride details button on click listener
         btn_confirm_rdetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //check if ride class is not selected display error
                 if (!wasalny.isChecked() && !wasalnyplus.isChecked() || ride_class.isEmpty()) {
                     txt_error.setVisibility(View.VISIBLE);
                 } else {
+                    //call confirm ride details function in parent fragment(home fragment)
                     txt_error.setVisibility(View.INVISIBLE);
                     Home_fragment parentFrag = ((Home_fragment) ride_details_fragment.this.getParentFragment());
                     parentFrag.confirm_ride_details(ride_class);
@@ -52,6 +53,7 @@ public class ride_details_fragment extends Fragment {
             }
         });
 
+        //radio group on checked listener radio button to choose ride class
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
