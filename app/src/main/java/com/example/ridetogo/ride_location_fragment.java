@@ -26,13 +26,19 @@ import java.util.List;
 import java.util.Locale;
 
 public class ride_location_fragment extends Fragment {
+    //ui vars
     private EditText pickup_loc;
     private Location user_location;
     private Button skip_destination;
+    private Home_fragment parentFrag;
 
+    //geocoder vars and google places vars
+    private Geocoder geocoder;
+    private AutocompleteSupportFragment autocompleteFragment;
+
+    //constructor that takes user location to display in fragment
     protected ride_location_fragment(Location user_location) {
         this.user_location = user_location;
-
     }
 
     @Override
@@ -43,22 +49,37 @@ public class ride_location_fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_ride_location_fragment, container, false);
+
+        //link ui vars
         pickup_loc = v.findViewById(R.id.edit_text_pickup);
         skip_destination = v.findViewById(R.id.btn_skip_destination);
+
+        //initialize places and geocoder vars and google places autocomplete fragment
         Places.initialize(getActivity().getApplicationContext(), "AIzaSyBSMkFBTs_UmxJdV2KQG5YuNYevT1eGStk");
-        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
-                getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
-        Home_fragment parentFrag = ((Home_fragment) ride_location_fragment.this.getParentFragment());
-        skip_destination.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                parentFrag.close_ride_location("", new LatLng(0.0, 0.0));
+        geocoder = new Geocoder(getActivity(), Locale.getDefault());
+        autocompleteFragment = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+        parentFrag = ((Home_fragment) ride_location_fragment.this.getParentFragment());
+
+        //set pickup loc textview with user location
+        try {
+            List<Address> listAddresses = geocoder.getFromLocation(user_location.getLatitude(), user_location.getLongitude(), 1);
+            if (null != listAddresses && listAddresses.size() > 0) {
+                String _Location = listAddresses.get(0).getAddressLine(0);
+                pickup_loc.setText(_Location);
+                pickup_loc.setFocusable(false);
             }
-        });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //set fields displayed by google places when user is searching for a location
         autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ADDRESS, Place.Field.NAME, Place.Field.LAT_LNG));
+
+        //the below line of code can set places to search in a specific country only
         //autocompleteFragment.setCountry("EG");
+
+        //when user selects a location from autocomplete fragment invoke close ride location function in parent fragment and pass the location name and latlng
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(@NonNull Place place) {
@@ -70,17 +91,15 @@ public class ride_location_fragment extends Fragment {
             public void onError(@NonNull Status status) {
             }
         });
-        Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
-        try {
-            List<Address> listAddresses = geocoder.getFromLocation(user_location.getLatitude(), user_location.getLongitude(), 1);
-            if (null != listAddresses && listAddresses.size() > 0) {
-                String _Location = listAddresses.get(0).getAddressLine(0);
-                pickup_loc.setText(_Location);
-                pickup_loc.setFocusable(false);
+
+        //skip destination button passes empty name and 0 latlng to parent fragment
+        skip_destination.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                parentFrag.close_ride_location("", new LatLng(0.0, 0.0));
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        });
+
         return v;
     }
 }
