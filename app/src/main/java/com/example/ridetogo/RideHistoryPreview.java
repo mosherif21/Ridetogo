@@ -40,6 +40,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public class RideHistoryPreview extends AppCompatActivity implements OnMapReadyCallback, RoutingListener {
+    private static final int[] COLORS = new int[]{R.color.black};
     //ui vars
     private TextView txt_from_to;
     private TextView txt_price;
@@ -48,11 +49,9 @@ public class RideHistoryPreview extends AppCompatActivity implements OnMapReadyC
     private TextView txt_phone;
     private ImageView userImage;
     private RatingBar ratingBar;
-
     //google map vars
     private GoogleMap mymap;
     private SupportMapFragment mapFragment;
-
     //ride details vars
     private String rideId;
     private String riderId;
@@ -61,10 +60,8 @@ public class RideHistoryPreview extends AppCompatActivity implements OnMapReadyC
     private String destination_name;
     private DatabaseReference history_ref;
     private String userId;
-
     //route drawing vars
     private List<Polyline> polylines;
-    private static final int[] COLORS = new int[]{R.color.black};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

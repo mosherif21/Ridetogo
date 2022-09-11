@@ -29,44 +29,57 @@ import java.util.Locale;
 
 public class rides_history extends Fragment {
 
+    //ui vars
     private RecyclerView history_recycler_view;
-    private RecyclerView.Adapter ride_history_adapter;
-    private RecyclerView.LayoutManager ride_history_manager;
-    private ArrayList RideHistory = new ArrayList<RideHistoryObject>();
     private ProgressBar progressBar;
     private TextView txt_previous;
+
+    //ride history rides recyclerview vars
+    private ArrayList RideHistory;
+    private RecyclerView.Adapter ride_history_adapter;
+    private RecyclerView.LayoutManager ride_history_manager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_rides_history, container, false);
+
+        //ui vars link
         history_recycler_view = v.findViewById(R.id.ride_history_recycler_view);
         progressBar = v.findViewById(R.id.ride_history_fragment_progressbar);
         txt_previous = v.findViewById(R.id.txt_previous_ride_history_frag);
+
+        //make loading bar visible until recycler view is occupied
         progressBar.setVisibility(View.VISIBLE);
+
+        //recycler view initialize and adapter initialize and set
         history_recycler_view.setNestedScrollingEnabled(false);
         history_recycler_view.setHasFixedSize(true);
         ride_history_manager = new LinearLayoutManager(((home) getActivity()));
         history_recycler_view.setLayoutManager(ride_history_manager);
         ride_history_adapter = new HistoryAdapter(getDataHistory(), ((home) getActivity()));
+        RideHistory = new ArrayList<RideHistoryObject>();
         history_recycler_view.setAdapter(ride_history_adapter);
+
+        //history rides get function
         getRideHistory();
         return v;
-
     }
 
     private void getRideHistory() {
+        //get user id and use it to get if user has ride history entry
         String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference reference = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders").child(userid).child("ride_history");
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //if snapshot exists fetch rides using ride history key
                 if (snapshot.exists() && snapshot.getChildrenCount() > 0) {
                     for (DataSnapshot rides : snapshot.getChildren()) {
                         FetchRideInformation(rides.getKey());
                     }
                 } else {
+                    //else display to user that he has no rides
                     progressBar.setVisibility(View.INVISIBLE);
                     txt_previous.setText("You have no previous rides");
                 }
@@ -79,8 +92,8 @@ public class rides_history extends Fragment {
         });
     }
 
+    //fetch each ride info using ride history reference key
     private void FetchRideInformation(String key) {
-        // String userid= FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference reference = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("RidesHistory").child(key);
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -93,8 +106,12 @@ public class rides_history extends Fragment {
                             timeStamp = Long.valueOf(rideData.getValue().toString());
                         }
                     }
+                    
+                    //occupy ride history object instance and add to ride history arraylist
                     RideHistoryObject obj = new RideHistoryObject(rideId, getDateOfTimeStamp(timeStamp));
                     RideHistory.add(obj);
+
+                    //ride history adapter notify data set changed
                     ride_history_adapter.notifyDataSetChanged();
                     progressBar.setVisibility(View.INVISIBLE);
                 }
@@ -108,6 +125,7 @@ public class rides_history extends Fragment {
         });
     }
 
+    //convert timestamp to date function
     private String getDateOfTimeStamp(Long timestamp) {
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
         calendar.setTimeInMillis(timestamp * 1000);
@@ -115,6 +133,7 @@ public class rides_history extends Fragment {
         return date;
     }
 
+    //ride history arraylist return function required by ride history recyclerview adapter
     private ArrayList<RideHistoryObject> getDataHistory() {
         return RideHistory;
     }
