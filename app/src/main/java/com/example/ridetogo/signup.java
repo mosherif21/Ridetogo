@@ -20,7 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class signup extends AppCompatActivity {
-    private FirebaseAuth mauth;
+
+    //ui vars
     private EditText txt_name;
     private EditText txt_email;
     private EditText txt_pass;
@@ -28,6 +29,9 @@ public class signup extends AppCompatActivity {
     private TextView name_error_txt;
     private TextView pass_error_txt;
     private Button txt_btn_signup;
+
+    //firebase and general vars
+    private FirebaseAuth mauth;
     private boolean email_confirm;
     private boolean pass_confirm;
     private boolean name_confirm;
@@ -38,8 +42,14 @@ public class signup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         getSupportActionBar().hide();
+
+        //get phone number from previous activity
         String phone_no = getIntent().getStringExtra("phone_no");
+
+        //firebase authorization initialize
         mauth = FirebaseAuth.getInstance();
+
+        //link ui vars
         txt_name = findViewById(R.id.name_signup);
         txt_email = findViewById(R.id.email_signup);
         txt_pass = findViewById(R.id.password_signup);
@@ -48,6 +58,8 @@ public class signup extends AppCompatActivity {
         pass_error_txt = findViewById(R.id.txt_password_error);
         name_error_txt = findViewById(R.id.txt_name_error);
         progressBar = findViewById(R.id.signup_progressbar);
+
+        //sign up button click listener
         txt_btn_signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,6 +70,7 @@ public class signup extends AppCompatActivity {
                 email_confirm = true;
                 name_confirm = true;
 
+                //get values from edit text
                 String email = txt_email.getText().toString().trim();
                 String pass = txt_pass.getText().toString().trim();
                 String name = txt_name.getText().toString().trim();
