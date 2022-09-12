@@ -91,10 +91,12 @@ public class signup extends AppCompatActivity {
                 }
                 if (name_confirm && pass_confirm && email_confirm) {
                     progressBar.setVisibility(View.VISIBLE);
+                    //if name, email are not empty and pass are not less than 8 characters then create new user with this email and password
                     mauth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
+                                //after creation insert user data in realtime database with user created using userid
                                 FirebaseUser user = task.getResult().getUser();
                                 DatabaseReference ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders")
                                         .child(user.getUid());
@@ -102,6 +104,7 @@ public class signup extends AppCompatActivity {
                                 ref.child("Email").setValue(user.getEmail());
                                 ref.child("Phone").setValue(phone_no);
                                 ref.child("Balance").setValue(0);
+                                //after data insertion sign in with email then go to home activity
                                 mauth.signInWithEmailAndPassword(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
