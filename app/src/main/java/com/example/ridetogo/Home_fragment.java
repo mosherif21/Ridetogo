@@ -281,6 +281,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
         }
         // JToast.makeText((getActivity()), "back key pressed", JToast.LENGTH_SHORT).show();
     }
+
     private void cancel_request() {
         fn_endpickupProgress();
     }
