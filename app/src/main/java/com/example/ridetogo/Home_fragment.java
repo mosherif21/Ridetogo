@@ -242,6 +242,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
         btn_ride_details.setFocusable(false);
         btn_ride_details.setBackgroundColor(Color.parseColor("#7A7979"));
         userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        ride_end_notify();
         return v;
     }
 
@@ -610,7 +611,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    //    JToast.makeText((getActivity()), "ongoing request detected", JToast.LENGTH_SHORT).show();
+                    //JToast.makeText((getActivity()), "ongoing request detected", JToast.LENGTH_SHORT).show();
                     FoundDriver_uid = snapshot.getValue().toString();
                     DatabaseReference ongoing_request_Ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference()
                             .child("Users").child("Drivers").child(FoundDriver_uid).child("customerRequest");
@@ -841,8 +842,10 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
         if (FoundDriver_uid != null)
             FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders").child(userid).child("ongoingRide").setValue(FoundDriver_uid);
         FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders").child(userid).child("ongoingRequest").setValue(null);
-        chosen_destination_marker = mymap.addMarker(new MarkerOptions().position((destination_location_latlng)).title(destination_of_ride_request_chosen_name).icon(BitmapDescriptorFactory.fromResource(R.drawable.destination_flag_small)));
-        getRouteToMarker2(destination_location_latlng);
+        if (destination_location_latlng.latitude != 0 && destination_location_latlng.longitude != 0) {
+            chosen_destination_marker = mymap.addMarker(new MarkerOptions().position((destination_location_latlng)).title(destination_of_ride_request_chosen_name).icon(BitmapDescriptorFactory.fromResource(R.drawable.destination_flag_small)));
+            getRouteToMarker2(destination_location_latlng);
+        }
         btn_call_help.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -965,7 +968,37 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
             routing.execute();
         }
     }
+private void ride_end_notify(){
+    DatabaseReference reference = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Ride_end_notify").child(userid).child("price");
+    listener = reference.addValueEventListener(new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            if (snapshot.exists()) {
+                String price = snapshot.getValue().toString();
+                notify_ride_end(price);
+                AlertDialog.Builder builder = new AlertDialog.Builder((getActivity()));
+                builder.setTitle("Ride end");
+                builder.setMessage("Your total is " + price + " EGP")
+                        .setCancelable(false)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.show();
 
+                reference.setValue(null);
+                reference.removeEventListener(listener);
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
+    });
+}
     private void getHasRideEnded() {
         driver_ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("customerRequest");
         driver_listener = driver_ref.addValueEventListener(new ValueEventListener() {
@@ -973,39 +1006,9 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (!snapshot.exists()) {
                     if (FoundDriver_uid != null) {
-                        DatabaseReference reference = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Ride_end_notify").child(FoundDriver_uid).child("price");
-                        listener = reference.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if (snapshot.exists()) {
-                                    String price = snapshot.getValue().toString();
-                                    notify_ride_end(price);
-                                    AlertDialog.Builder builder = new AlertDialog.Builder((getActivity()));
-                                    builder.setTitle("Ride end");
-                                    builder.setMessage("Your total is " + price + " EGP")
-                                            .setCancelable(false)
-                                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int id) {
-                                                    dialog.dismiss();
-                                                }
-                                            });
-                                    AlertDialog alert = builder.create();
-                                    alert.show();
-
-                                    reference.setValue(null);
-                                    reference.removeEventListener(listener);
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-                        });
-
-                    }
-                    fn_endpickupProgress();
-
+                        ride_end_notify();
+                        fn_endpickupProgress();
+                }
                 }
             }
 

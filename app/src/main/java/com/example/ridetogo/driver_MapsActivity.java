@@ -261,8 +261,7 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
             FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(userid).child("pausesong").setValue(null);
         }
         eraseRoutePolyLines();
-        fn_cancel_request();
-
+        switch_Driver_on_off.setChecked(true);
     }
 
     private void saveRideInfo() {
@@ -311,8 +310,9 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
                     double total_fare = time_fare + distance_fare + base_fare;
                     datamap.put("price", Math.floor(total_fare));
                     historyRef.child(rideHistoryId).updateChildren(datamap);
-                    DatabaseReference reference = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Ride_end_notify").child(userid).child("price");
+                    DatabaseReference reference = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Ride_end_notify").child(assigned_customer_id).child("price");
                     reference.setValue(Math.floor(total_fare));
+                    fn_cancel_request();
                     AlertDialog.Builder builder = new AlertDialog.Builder(driver_MapsActivity.this);
                     builder.setTitle("Ride end");
                     builder.setMessage("Ride total is " + Math.floor(total_fare) + " EGP")
@@ -412,7 +412,6 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
         check_ongoing_Ride=false;
         layout_assigned_customer_info.setVisibility(View.INVISIBLE);
         layout_driver_settings.setVisibility(View.VISIBLE);
-        switch_Driver_on_off.setChecked(true);
         eraseRoutePolyLines();
         ongoing_Ride = false;
         customer_name.setText("");
@@ -422,12 +421,12 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
         DatabaseReference driver_ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(driverID).child("customerRequest");
         if (driver_ref != null)
             driver_ref.setValue(null);
-        if (!assigned_customer_id.equals("") || assigned_customer_id != null) {
+        if (!assigned_customer_id.equals("") && assigned_customer_id != null) {
             FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("CustomerRequest").child(assigned_customer_id).setValue(null);
             FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference()
                     .child("Users").child("Drivers").child(userid).child("ongoingRide").setValue(null);
         }
-        DatabaseReference reference = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference("CustomerRequest");
+        DatabaseReference reference = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference("AvailableDrivers");
         GeoFire geofire = new GeoFire(reference);
         geofire.removeLocation(driverID, new GeoFire.CompletionListener() {
             @Override
@@ -446,8 +445,7 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
 
     private void getAssignedCustomer() {
         ongoing_Ride_notify_Ref.removeEventListener(check_ongoing_Ride_listener);
-        String driverID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        customer_request_ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(driverID).child("customerRequest");
+        customer_request_ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(userid).child("customerRequest");
         customer_request_ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -475,6 +473,7 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
                     destination_lat_lng = new LatLng(Lat, Long);
                     getcustomerLocation();
                     getcustomerinfo();
+                    switch_Driver_on_off.setChecked(true);
                     if (check_ongoing_Ride) {
                         layout_assigned_customer_info.setVisibility(View.INVISIBLE);
                         layout_onGoing_ride.setVisibility(View.VISIBLE);
@@ -654,7 +653,7 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
     public void onLocationChanged(@NonNull Location location) {
         if (!logout_bol && location_changed_onstop == 0) {
             mlocation = location;
-            if (customer_lat_lng != null && !zoom_first_time) {
+            if (customer_lat_lng != null && !zoom_first_time&&!check_ongoing_Ride) {
                 getRouteToMarker(customer_lat_lng);
             }
             if (!zoom_first_time) {
