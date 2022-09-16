@@ -57,8 +57,8 @@ public class rides_history extends Fragment {
         history_recycler_view.setHasFixedSize(true);
         ride_history_manager = new LinearLayoutManager(((home) getActivity()));
         history_recycler_view.setLayoutManager(ride_history_manager);
-        ride_history_adapter = new HistoryAdapter(getDataHistory(), ((home) getActivity()));
         RideHistory = new ArrayList<RideHistoryObject>();
+        ride_history_adapter = new HistoryAdapter(getDataHistory(), ((home) getActivity()));
         history_recycler_view.setAdapter(ride_history_adapter);
 
         //history rides get function
