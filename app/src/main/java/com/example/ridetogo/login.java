@@ -204,6 +204,7 @@ public class login extends AppCompatActivity {
         super.onResume();
         progressBar.setVisibility(View.INVISIBLE);
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        googleSignInClient.signOut();
     }
 
     @Override
@@ -232,7 +233,6 @@ public class login extends AppCompatActivity {
                                     checkuser_exists.addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                            hideSoftKeyboard(login.this);
                                             //if exists go to login activity
                                             if (snapshot.exists()) {
                                                 progressBar.setVisibility(View.INVISIBLE);
