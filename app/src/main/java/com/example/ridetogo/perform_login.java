@@ -25,19 +25,11 @@ public class perform_login extends AppCompatActivity {
     //firebase vars
     private FirebaseAuth mauth;
 
-    //function to hide keyboard
-    private static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perform_login);
         getSupportActionBar().hide();
-
-        // hideSoftKeyboard(perform_login.this);
 
         //firebase vars initialize
         mauth = FirebaseAuth.getInstance();

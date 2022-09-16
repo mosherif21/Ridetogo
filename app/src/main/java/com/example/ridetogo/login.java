@@ -109,6 +109,7 @@ public class login extends AppCompatActivity {
                             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             progressBar.setVisibility(View.VISIBLE);
+                            hideSoftKeyboard(login.this);
                             String full_phone_no = "+" + country_code.getFullNumber();
                             //check if entered number already used by driver
                             FirebaseDatabase database = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/");
@@ -125,7 +126,6 @@ public class login extends AppCompatActivity {
                                         intent.putExtra("driver", "yes");
                                         startActivity(intent);
                                         finish();
-                                        hideSoftKeyboard(login.this);
                                     } else {
                                         //check if entered number already used by rider
                                         Query checkuser_exists = database.getReference("Users").child("Riders").orderByChild("Phone").equalTo(full_phone_no.trim());
@@ -143,7 +143,6 @@ public class login extends AppCompatActivity {
                                                     intent.putExtra("driver", "no");
                                                     startActivity(intent);
                                                     finish();
-                                                    hideSoftKeyboard(login.this);
                                                 } else {
                                                     //if number is not registered then go to otp verification activity
                                                     progressBar.setVisibility(View.INVISIBLE);
@@ -152,7 +151,6 @@ public class login extends AppCompatActivity {
                                                     intent.putExtra("phone_no", full_phone_no);
                                                     intent.putExtra("loginORsignupORother", "signup");
                                                     startActivity(intent);
-                                                    hideSoftKeyboard(login.this);
                                                 }
                                             }
 
@@ -234,13 +232,13 @@ public class login extends AppCompatActivity {
                                     checkuser_exists.addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            hideSoftKeyboard(login.this);
                                             //if exists go to login activity
                                             if (snapshot.exists()) {
                                                 progressBar.setVisibility(View.INVISIBLE);
                                                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                 Intent intent = new Intent(login.this, driver_MapsActivity.class);
                                                 startActivity(intent);
-                                                hideSoftKeyboard(login.this);
 
                                             } else {
                                                 //check if entered number already used by rider
@@ -256,8 +254,6 @@ public class login extends AppCompatActivity {
                                                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                             Intent intent = new Intent(login.this, home.class);
                                                             startActivity(intent);
-                                                            hideSoftKeyboard(login.this);
-
                                                         } else {
                                                             //if number is not registered then go to otp verification activity
                                                             progressBar.setVisibility(View.INVISIBLE);
@@ -266,7 +262,6 @@ public class login extends AppCompatActivity {
                                                             intent.putExtra("driver", "no");
                                                             intent.putExtra("loginORsignupORother", "google_signup");
                                                             startActivity(intent);
-                                                            hideSoftKeyboard(login.this);
                                                         }
                                                     }
 

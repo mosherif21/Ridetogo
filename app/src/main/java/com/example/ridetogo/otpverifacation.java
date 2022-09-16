@@ -23,10 +23,7 @@ import com.chaos.view.PinView;
 import com.example.ridetogo.Listeners.network_listener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseException;
-import com.google.firebase.appcheck.FirebaseAppCheck;
-import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
@@ -91,11 +88,6 @@ public class otpverifacation extends AppCompatActivity {
         btn_verify.setClickable(false);
         otp_inst.setText("Please enter one time OTP code sent to\n" + phone_no);
 
-        //firebase authentication initialize
-        FirebaseApp.initializeApp(/*context=*/ this);
-        FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
-        firebaseAppCheck.installAppCheckProviderFactory(
-                SafetyNetAppCheckProviderFactory.getInstance());
         mAuth = FirebaseAuth.getInstance();
 
         //after otp code sent call back listener can listen to sms sent to same device and automatically verify otp
