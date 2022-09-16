@@ -24,6 +24,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ridetogo">
         <activity
+            android:name=".phone_otp_Enter"
+            android:exported="false" />
+        <activity
+            android:name=".password_login_Activity"
+            android:exported="false" />
+        <activity
             android:name=".password_change_activity"
             android:exported="false" />
         <activity

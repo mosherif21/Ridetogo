@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         if (user != null) {
             //check if the user logged in is a driver or a rider and launch the corresponding activity
             Query checkuser_exists = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").
-                    getReference("Users").child("Riders").orderByChild("Email").equalTo(user.getEmail());
+                    getReference("Users").child("Riders").orderByChild("Phone").equalTo(user.getPhoneNumber());
             checkuser_exists.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {

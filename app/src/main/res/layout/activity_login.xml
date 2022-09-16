@@ -155,8 +155,22 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline36"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline38"
-        app:layout_constraintTop_toBottomOf="@+id/countryCodePicker"
+        app:layout_constraintTop_toBottomOf="@+id/countryCodePicker_phone_otp"
         app:layout_constraintVertical_bias="1.0" />
+
+    <com.shobhitpuri.custombuttons.GoogleSignInButton
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/btn_googleSignup"
+        android:layout_centerInParent="true"
+        android:text="Continue with Google"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="6:1"
+        app:layout_constraintEnd_toStartOf="@+id/guideline36"
+        app:layout_constraintStart_toStartOf="@+id/guideline38"
+        app:layout_constraintTop_toBottomOf="@+id/btn_login"
+        app:layout_constraintVertical_bias="0.060000002"
+        app:isDarkTheme="true"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

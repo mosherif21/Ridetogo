@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -45,6 +44,7 @@ public class signup extends AppCompatActivity {
 
         //get phone number from previous activity
         String phone_no = getIntent().getStringExtra("phone_no");
+        // PhoneAuthCredential credential=(PhoneAuthCredential)getIntent().getParcelableExtra("phoneAuth_Credential");
 
         //firebase authorization initialize
         mauth = FirebaseAuth.getInstance();
@@ -63,6 +63,7 @@ public class signup extends AppCompatActivity {
         txt_btn_signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
                 pass_error_txt.setVisibility(View.INVISIBLE);
                 email_error_txt.setVisibility(View.INVISIBLE);
                 name_error_txt.setVisibility(View.INVISIBLE);
@@ -78,53 +79,39 @@ public class signup extends AppCompatActivity {
                     pass_confirm = false;
                     pass_error_txt.setText(" password can't be less than 8 characters");
                     pass_error_txt.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.INVISIBLE);
                 }
                 if (name.equals("")) {
                     name_confirm = false;
                     name_error_txt.setText("name can't be empty");
                     name_error_txt.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.INVISIBLE);
                 }
-                if (email.equals("")) {
+                if (!email.isEmpty() && email.length() < 7) {
                     email_confirm = false;
                     email_error_txt.setText("email can't be empty");
                     email_error_txt.setVisibility(View.VISIBLE);
                 }
                 if (name_confirm && pass_confirm && email_confirm) {
-                    progressBar.setVisibility(View.VISIBLE);
-                    //if name, email are not empty and pass are not less than 8 characters then create new user with this email and password
-                    mauth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    DatabaseReference ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders")
+                            .child(user.getUid());
+                    ref.child("Name").setValue(name);
+                    ref.child("Email").setValue(email);
+                    ref.child("Phone").setValue(phone_no);
+                    ref.child("Balance").setValue(0).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                //after creation insert user data in realtime database with user created using userid
-                                FirebaseUser user = task.getResult().getUser();
-                                DatabaseReference ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders")
-                                        .child(user.getUid());
-                                ref.child("Name").setValue(name);
-                                ref.child("Email").setValue(user.getEmail());
-                                ref.child("Phone").setValue(phone_no);
-                                ref.child("Balance").setValue(0);
-                                //after data insertion sign in with email then go to home activity
-                                mauth.signInWithEmailAndPassword(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<AuthResult> task) {
-                                        progressBar.setVisibility(View.INVISIBLE);
-                                        Intent intent = new Intent(signup.this, home.class);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                });
-                            } else {
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
                                 progressBar.setVisibility(View.INVISIBLE);
-                                email_error_txt.setText("Please enter a valid email");
-                                email_error_txt.setVisibility(View.VISIBLE);
+                                Intent intent = new Intent(signup.this, home.class);
+                                startActivity(intent);
+                                finish();
                             }
                         }
                     });
                 }
             }
-
-
         });
 
 

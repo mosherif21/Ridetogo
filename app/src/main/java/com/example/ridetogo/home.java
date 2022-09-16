@@ -173,10 +173,12 @@ public class home extends AppCompatActivity implements nav_items_adapter.OnItemS
 
     private void logout_priv() {
         FirebaseAuth.getInstance().signOut();
-        Intent intent = new Intent(home.this, login.class);
+
+        Intent intent = new Intent(home.this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        startActivity(intent);
         finish();
+        startActivity(intent);
+
     }
 
     //back press override to close the navigation bar if opened or notify home home fragment that back press was triggered

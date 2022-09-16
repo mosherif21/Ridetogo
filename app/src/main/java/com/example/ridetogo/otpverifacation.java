@@ -30,13 +30,21 @@ import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.concurrent.TimeUnit;
 
 public class otpverifacation extends AppCompatActivity {
+
+    //general vars
+    private String signupOrLogin;
+    private String isdriver;
+    private String phone_no;
 
     //ui vars
     private TextView otp_inst;
@@ -48,15 +56,11 @@ public class otpverifacation extends AppCompatActivity {
     private ProgressBar progressBar;
     private String code_from_system;
     private LottieAnimationView timer_icon;
-    private String phone_no;
 
     //network listener var
     private network_listener network_listener;
-
     //firebase authentication vars
     private FirebaseAuth mAuth;
-
-
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
 
     @Override
@@ -69,8 +73,12 @@ public class otpverifacation extends AppCompatActivity {
         com.example.ridetogo.Listeners.network_listener.updateActivity(this, 1);
         network_listener = new network_listener();
 
-        //ui vars link
+        //get data from previous activity
         phone_no = getIntent().getStringExtra("phone_no");
+        signupOrLogin = getIntent().getStringExtra("loginORsignupORother");
+        isdriver = getIntent().getStringExtra("driver");
+
+        //ui vars link
         otp_inst = findViewById(R.id.otp_text_inst);
         txt_timer = findViewById(R.id.txt_timer);
         txt_wrong_number = findViewById(R.id.txt_wrong_number);
@@ -82,7 +90,6 @@ public class otpverifacation extends AppCompatActivity {
         progressBar = findViewById(R.id.otp_progressbar);
         btn_verify.setClickable(false);
         otp_inst.setText("Please enter one time OTP code sent to\n" + phone_no);
-
 
         //firebase authentication initialize
         FirebaseApp.initializeApp(/*context=*/ this);
@@ -226,30 +233,71 @@ public class otpverifacation extends AppCompatActivity {
 
     //sign in with phone authorization credential to check it otp is valid
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            //otp is valid go to signup activity
-                            progressBar.setVisibility(View.INVISIBLE);
-                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            FirebaseAuth mauth = FirebaseAuth.getInstance();
-                            mauth.signOut();
-                            Intent intent = new Intent(otpverifacation.this, signup.class);
-                            intent.putExtra("phone_no", phone_no);
-                            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
-                            finish();
-                        } else {
-                            //otp is invalid
-                            progressBar.setVisibility(View.INVISIBLE);
-                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                                Toast.makeText(otpverifacation.this, "Invalid otp code", Toast.LENGTH_SHORT).show();
+        if (signupOrLogin.equals("google_signup")) {
+            mAuth.getCurrentUser().linkWithCredential(credential)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                FirebaseUser user = task.getResult().getUser();
+                                String email = user.getEmail();
+                                String name = user.getDisplayName();
+                                String user_id = user.getUid();
+                                DatabaseReference ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders")
+                                        .child(user_id);
+                                ref.child("Name").setValue(name);
+                                ref.child("Email").setValue(email);
+                                ref.child("Phone").setValue(phone_no);
+                                ref.child("Balance").setValue(0).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            progressBar.setVisibility(View.INVISIBLE);
+                                            Intent intent = new Intent(otpverifacation.this, home.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    }
+                                });
+                            } else {
+                                JToast.makeText(otpverifacation.this, "invalid otp", JToast.LENGTH_SHORT).show();
                             }
                         }
-                    }
-                });
+                    });
+        } else {
+            mAuth.signInWithCredential(credential)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                //otp is valid go to signup activity
+                                progressBar.setVisibility(View.INVISIBLE);
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                Intent intent = null;
+                                if (signupOrLogin.equals("signup")) {
+                                    intent = new Intent(otpverifacation.this, signup.class);
+                                    intent.putExtra("phone_no", phone_no);
+                                    //    intent.putExtra("phoneAuth_Credential", credential);
+                                } else if (signupOrLogin.equals("login")) {
+                                    if (isdriver.equals("yes")) {
+                                        intent = new Intent(otpverifacation.this, driver_MapsActivity.class);
+                                    } else {
+                                        intent = new Intent(otpverifacation.this, home.class);
+                                    }
+                                }
+                                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                finish();
+                            } else {
+                                //otp is invalid
+                                progressBar.setVisibility(View.INVISIBLE);
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                                    Toast.makeText(otpverifacation.this, "Invalid otp code", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+                    });
+        }
     }
 
     @Override

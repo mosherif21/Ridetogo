@@ -89,8 +89,6 @@ public class settings_fragment extends Fragment {
         email_verify_text = v.findViewById(R.id.email_verified_text);
         btn_verify_email = v.findViewById(R.id.btn_verify_email);
 
-        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         btn_verify_email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,6 +183,7 @@ public class settings_fragment extends Fragment {
 
     private void getuserinfo() {
         progressBar.setVisibility(View.VISIBLE);
+       // getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         customer_Ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -205,7 +204,7 @@ public class settings_fragment extends Fragment {
                         String image_profileurl = datamap.get("profile_image").toString();
                         Glide.with(((home) getActivity())).load(image_profileurl).into(user_image);
                     }
-                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                  //  getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     progressBar.setVisibility(View.INVISIBLE);
                 }
             }
