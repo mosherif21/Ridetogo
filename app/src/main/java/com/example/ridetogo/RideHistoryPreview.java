@@ -20,6 +20,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
@@ -137,8 +138,8 @@ public class RideHistoryPreview extends AppCompatActivity implements OnMapReadyC
                             destinationLatlng = new LatLng(Double.parseDouble(history_child.child("to").child("lat").getValue().toString()), Double.parseDouble(history_child.child("to").child("lng").getValue().toString()));
                             if (pickupLatlng != null && destinationLatlng != null) {
                                 //add pickup and destination markers
-                                mymap.addMarker(new MarkerOptions().position((pickupLatlng)).title("Pickup location"));
-                                mymap.addMarker(new MarkerOptions().position((destinationLatlng)).title(destination_name));
+                                mymap.addMarker(new MarkerOptions().position((pickupLatlng)).title("Pickup location").icon(BitmapDescriptorFactory.fromResource(R.drawable.pickup_flag_small)));
+                                mymap.addMarker(new MarkerOptions().position((destinationLatlng)).title(destination_name).icon(BitmapDescriptorFactory.fromResource(R.drawable.destination_flag_small)));
                                 //draw route between pickup and location
                                 getRouteToMarker();
                                 //animate camera to route
