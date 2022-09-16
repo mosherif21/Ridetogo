@@ -39,13 +39,13 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline81"
         app:layout_constraintTop_toBottomOf="@+id/textView47"
-        app:layout_constraintVertical_bias="0.003" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/btn_phone_otp_login"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="52dp"
         android:backgroundTint="#7A7979"
         android:text="CONTINUE"
         android:textStyle="bold"
@@ -69,9 +69,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="6:1"
         app:layout_constraintEnd_toStartOf="@+id/guideline82"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline81"
-        app:layout_constraintTop_toBottomOf="@+id/countryCodePicker_phone_otp" />
+        app:layout_constraintTop_toBottomOf="@+id/countryCodePicker_phone_otp"
+        app:layout_constraintVertical_bias="1.0" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline82"
