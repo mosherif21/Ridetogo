@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -255,8 +256,13 @@ public class otpverifacation extends AppCompatActivity {
                                         }
                                     }
                                 });
-                            } else {
-                                JToast.makeText(otpverifacation.this, "invalid otp", JToast.LENGTH_SHORT).show();
+                            }   else {
+                                //otp is invalid
+                                progressBar.setVisibility(View.INVISIBLE);
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                if (((FirebaseAuthInvalidCredentialsException) task.getException()).getErrorCode().equals("ERROR_INVALID_VERIFICATION_CODE")) {
+                                    JToast.makeText(otpverifacation.this,"invalid otp code",JToast.LENGTH_SHORT).show();
+                                }
                             }
                         }
                     });
@@ -285,12 +291,13 @@ public class otpverifacation extends AppCompatActivity {
                                 progressBar.setVisibility(View.INVISIBLE);
                                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             }
+
                             else {
                                 //otp is invalid
                                 progressBar.setVisibility(View.INVISIBLE);
                                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                                    Toast.makeText(otpverifacation.this, "Invalid otp code", Toast.LENGTH_SHORT).show();
+                                if (((FirebaseAuthInvalidCredentialsException) task.getException()).getErrorCode().equals("ERROR_INVALID_VERIFICATION_CODE")) {
+                                   JToast.makeText(otpverifacation.this,"invalid otp",JToast.LENGTH_SHORT).show();
                                 }
                             }
                         }
