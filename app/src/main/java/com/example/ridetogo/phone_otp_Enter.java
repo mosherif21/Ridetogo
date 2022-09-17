@@ -9,9 +9,16 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.hbb20.CountryCodePicker;
 
 public class phone_otp_Enter extends AppCompatActivity {
@@ -19,6 +26,7 @@ public class phone_otp_Enter extends AppCompatActivity {
     private CountryCodePicker country_code;
     private EditText phone_num;
     private Button btn_continue;
+    private ProgressBar progressBar;
 
     //general vars
     private String signORloginORother;
@@ -42,6 +50,7 @@ public class phone_otp_Enter extends AppCompatActivity {
         country_code = findViewById(R.id.countryCodePicker_phone_otp);
         phone_num = findViewById(R.id.phone_number_phone);
         btn_continue = findViewById(R.id.btn_phone_otp_login);
+        progressBar = findViewById(R.id.phone_otp_enter_progressbar);
         btn_continue.setClickable(false);
         country_code.registerCarrierNumberEditText(phone_num);
 
@@ -61,13 +70,59 @@ public class phone_otp_Enter extends AppCompatActivity {
                         public void onClick(View v) {
                             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            progressBar.setVisibility(View.VISIBLE);
                             String full_phone_no = "+" + country_code.getFullNumber();
-                            Intent intent = new Intent(phone_otp_Enter.this, otpverifacation.class);
-                            intent.putExtra("phone_no", full_phone_no);
-                            intent.putExtra("loginORsignupORother", signORloginORother);
-                            intent.putExtra("driver", isdriver);
-                            startActivity(intent);
-                            hideSoftKeyboard(phone_otp_Enter.this);
+                            FirebaseDatabase database = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path);
+                            Query checkuser_exists = database.getReference("Users").child("Drivers").orderByChild("Phone").equalTo(full_phone_no);
+                            checkuser_exists.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    //check if entered number already used by driver
+                                    if (snapshot.exists()) {
+                                        //number already used by a driver
+                                        JToast.makeText(phone_otp_Enter.this, "number already used by another account", JToast.LENGTH_SHORT).show();
+                                        progressBar.setVisibility(View.INVISIBLE);
+                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                    } else {
+                                        //check if entered number already used by rider
+                                        Query checkuser_exists = database.getReference("Users").child("Riders").orderByChild("Phone").equalTo(full_phone_no);
+                                        checkuser_exists.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                if (snapshot.exists()) {
+                                                    //number already used by a rider
+                                                    JToast.makeText(phone_otp_Enter.this, "number already used by another account", JToast.LENGTH_SHORT).show();
+                                                    progressBar.setVisibility(View.INVISIBLE);
+                                                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                } else {
+                                                    //if number is not registered then link with google account
+                                                    hideSoftKeyboard(phone_otp_Enter.this);
+                                                    Intent intent = new Intent(phone_otp_Enter.this, otpverifacation.class);
+                                                    intent.putExtra("phone_no", full_phone_no);
+                                                    intent.putExtra("loginORsignupORother", signORloginORother);
+                                                    intent.putExtra("driver", isdriver);
+                                                    startActivity(intent);
+                                                    progressBar.setVisibility(View.INVISIBLE);
+                                                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
+
+                                            }
+                                        });
+
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                    progressBar.setVisibility(View.INVISIBLE);
+                                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                                }
+                            });
                         }
                     });
 

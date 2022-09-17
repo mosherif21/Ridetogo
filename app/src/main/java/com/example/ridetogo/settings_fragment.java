@@ -79,7 +79,7 @@ public class settings_fragment extends Fragment {
         progressBar = v.findViewById(R.id.account_Settings_progressbar);
         user = FirebaseAuth.getInstance().getCurrentUser();
         userid = user.getUid();
-        customer_Ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Users").child("Riders").child(userid);
+        customer_Ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference("Users").child("Riders").child(userid);
         getuserinfo();
         btn_signout = v.findViewById(R.id.btn_signout);
         layout_profileImage = v.findViewById(R.id.settings_profile_picture);

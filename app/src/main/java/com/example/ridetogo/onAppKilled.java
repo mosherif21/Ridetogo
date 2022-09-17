@@ -23,7 +23,7 @@ public class onAppKilled extends Service {
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
         String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference("AvailableDrivers");
+        DatabaseReference ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference("AvailableDrivers");
         GeoFire geofire = new GeoFire(ref);
         geofire.removeLocation(userid, new GeoFire.CompletionListener() {
             @Override

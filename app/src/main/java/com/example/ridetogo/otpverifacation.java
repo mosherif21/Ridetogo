@@ -31,8 +31,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.concurrent.TimeUnit;
 
@@ -227,7 +231,7 @@ public class otpverifacation extends AppCompatActivity {
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
         if (signupOrLogin.equals("google_signup")) {
             mAuth.getCurrentUser().linkWithCredential(credential)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    .addOnCompleteListener(otpverifacation.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
@@ -235,7 +239,7 @@ public class otpverifacation extends AppCompatActivity {
                                 String email = user.getEmail();
                                 String name = user.getDisplayName();
                                 String user_id = user.getUid();
-                                DatabaseReference ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders")
+                                DatabaseReference ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Riders")
                                         .child(user_id);
                                 ref.child("Name").setValue(name);
                                 ref.child("Email").setValue(email);
@@ -256,6 +260,7 @@ public class otpverifacation extends AppCompatActivity {
                             }
                         }
                     });
+
         } else {
             mAuth.signInWithCredential(credential)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -263,8 +268,6 @@ public class otpverifacation extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 //otp is valid go to signup activity
-                                progressBar.setVisibility(View.INVISIBLE);
-                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                 Intent intent = null;
                                 if (signupOrLogin.equals("signup")) {
                                     intent = new Intent(otpverifacation.this, signup.class);
@@ -279,7 +282,10 @@ public class otpverifacation extends AppCompatActivity {
                                 }
                                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                                 finish();
-                            } else {
+                                progressBar.setVisibility(View.INVISIBLE);
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            }
+                            else {
                                 //otp is invalid
                                 progressBar.setVisibility(View.INVISIBLE);
                                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);

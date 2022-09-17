@@ -443,7 +443,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
             search_driver_anim.setVisibility(View.VISIBLE);
             ride_request_progress_txt.setText("Finding your driver....");
 
-            DatabaseReference ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference("CustomerRequest");
+            DatabaseReference ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference("CustomerRequest");
             geofire = new GeoFire(ref);
             geofire.setLocation(userid, new GeoLocation(confirmed_pickup_latlng.latitude, confirmed_pickup_latlng.longitude), new GeoFire.CompletionListener() {
                 @Override
@@ -455,7 +455,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
                     }
                 }
             });
-            ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders").child(userid).child("CurrentRequest");
+            ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Riders").child(userid).child("CurrentRequest");
             HashMap datamap = new HashMap();
             datamap.put("ride_Class", ride_class);
             if (destination_of_ride_request_chosen_name.equals(""))
@@ -472,7 +472,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
     }
 
     private void findClosestDriver(String ride_class, LatLng pickup_latlng_search) {
-        DatabaseReference ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference("AvailableDrivers");
+        DatabaseReference ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference("AvailableDrivers");
         geofire = new GeoFire(ref);
         geoQuery1 = geofire.queryAtLocation(new GeoLocation(pickup_latlng_search.latitude, pickup_latlng_search.longitude), radius);
         geoQuery1.addGeoQueryEventListener(new GeoQueryEventListener() {
@@ -481,7 +481,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
                 if (!FoundDriver && request_bol) {
                     FoundDriver_uid = key;
                     geoQuery1.removeAllListeners();
-                    Query query1 = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("wasalnyClass");
+                    Query query1 = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("wasalnyClass");
                     query1.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -530,14 +530,14 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
     }
 
     private void check_ongoing_ride() {
-        DatabaseReference ongoing_Req_ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders").child(userid).child("ongoingRide");
+        DatabaseReference ongoing_Req_ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Riders").child(userid).child("ongoingRide");
         ongoing_Req_ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     FoundDriver_uid = snapshot.getValue(String.class);
                     locations_rideDetails_layout.setVisibility(View.INVISIBLE);
-                    DatabaseReference ongoing_request_Ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference()
+                    DatabaseReference ongoing_request_Ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference()
                             .child("Users").child("Drivers").child(FoundDriver_uid).child("customerRequest");
                     ongoing_request_Ref.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -559,7 +559,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
                                     destination_lng = Double.parseDouble(datamap.get("destination_lng").toString());
                                 }
                                 destination_location_latlng = new LatLng(destination_lat, destination_lng);
-                                DatabaseReference pickup_point_Ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("CustomerRequest").child(userid).child("l");
+                                DatabaseReference pickup_point_Ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("CustomerRequest").child(userid).child("l");
                                 pickup_point_Ref.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -606,14 +606,14 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
     }
 
     private void check_ongoing_request() {
-        DatabaseReference ongoing_Req_ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders").child(userid).child("ongoingRequest");
+        DatabaseReference ongoing_Req_ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Riders").child(userid).child("ongoingRequest");
         ongoing_Req_ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     //JToast.makeText((getActivity()), "ongoing request detected", JToast.LENGTH_SHORT).show();
                     FoundDriver_uid = snapshot.getValue().toString();
-                    DatabaseReference ongoing_request_Ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference()
+                    DatabaseReference ongoing_request_Ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference()
                             .child("Users").child("Drivers").child(FoundDriver_uid).child("customerRequest");
                     ongoing_request_Ref.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -635,7 +635,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
                                     destination_lng = Double.parseDouble(datamap.get("destination_lng").toString());
                                 }
                                 destination_location_latlng = new LatLng(destination_lat, destination_lng);
-                                DatabaseReference pickup_point_Ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("CustomerRequest").child(userid).child("l");
+                                DatabaseReference pickup_point_Ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("CustomerRequest").child(userid).child("l");
                                 pickup_point_Ref.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -686,7 +686,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
     }
 
     private void check_made_Request() {
-        DatabaseReference made_request_ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders").child(userid).child("CurrentRequest");
+        DatabaseReference made_request_ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Riders").child(userid).child("CurrentRequest");
         made_request_ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -710,7 +710,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
                     }
                     destination_location_latlng = new LatLng(destination_lat, destination_lng);
 
-                    DatabaseReference customer_req_ref_loc = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("CustomerRequest").child(userid).child("l");
+                    DatabaseReference customer_req_ref_loc = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("CustomerRequest").child(userid).child("l");
                     customer_req_ref_loc.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -755,7 +755,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
         FoundDriver = true;
         if (FoundDriver_uid != null) {
 
-            DatabaseReference driverRef = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference()
+            DatabaseReference driverRef = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference()
                     .child("Users").child("Drivers").child(FoundDriver_uid).child("customerRequest");
             HashMap datamap = new HashMap();
             datamap.put("CustomerRideId", cust_id);
@@ -768,8 +768,8 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
             datamap.put("destination_lng", destination_location_latlng.longitude);
             driverRef.updateChildren(datamap);
             ride_request_progress_txt.setText("Finding your driver's location");
-            FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders").child(userid).child("CurrentRequest").setValue(null);
-            FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders").child(userid).child("ongoingRequest").setValue(FoundDriver_uid);
+            FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Riders").child(userid).child("CurrentRequest").setValue(null);
+            FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Riders").child(userid).child("ongoingRequest").setValue(FoundDriver_uid);
             getDriverLocation();
             getHasRideEnded();
             getDriverInfo();
@@ -781,7 +781,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
 
     private void getdriverAskPick(String driverid) {
 
-        DatabaseReference reference = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("pickRequest").child(driverid).child("pickCustomer");
+        DatabaseReference reference = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("pickRequest").child(driverid).child("pickCustomer");
         if (listener_pickup != null)
             reference.removeEventListener(listener_pickup);
         listener_pickup = reference.addValueEventListener(new ValueEventListener() {
@@ -840,8 +840,8 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
         ongoing_Ride = true;
         routePickupOrpickuppoint = 3;
         if (FoundDriver_uid != null)
-            FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders").child(userid).child("ongoingRide").setValue(FoundDriver_uid);
-        FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders").child(userid).child("ongoingRequest").setValue(null);
+            FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Riders").child(userid).child("ongoingRide").setValue(FoundDriver_uid);
+        FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Riders").child(userid).child("ongoingRequest").setValue(null);
         if (destination_location_latlng.latitude != 0 && destination_location_latlng.longitude != 0) {
             chosen_destination_marker = mymap.addMarker(new MarkerOptions().position((destination_location_latlng)).title(destination_of_ride_request_chosen_name).icon(BitmapDescriptorFactory.fromResource(R.drawable.destination_flag_small)));
             getRouteToMarker2(destination_location_latlng);
@@ -856,7 +856,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
     }
 
     private void getDriverLocation() {
-        driver_loc = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("DriversWorking").child(FoundDriver_uid).child("l");
+        driver_loc = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("DriversWorking").child(FoundDriver_uid).child("l");
         driver_locListener = driver_loc.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -963,13 +963,13 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
                     .withListener(this)
                     .alternativeRoutes(false)
                     .waypoints(pickup_made_request_latlng, destination_latlng)
-                    .key("AIzaSyDhwZjpwoi5aX3XwxkbVyLzdHbyT-6KcOw")
+                    .key(firebase_google_keys_ids.google_maps_api_key)
                     .build();
             routing.execute();
         }
     }
 private void ride_end_notify(){
-    DatabaseReference reference = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Ride_end_notify").child(userid).child("price");
+    DatabaseReference reference = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Ride_end_notify").child(userid).child("price");
     listener = reference.addValueEventListener(new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -1000,7 +1000,7 @@ private void ride_end_notify(){
     });
 }
     private void getHasRideEnded() {
-        driver_ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("customerRequest");
+        driver_ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("customerRequest");
         driver_listener = driver_ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -1034,11 +1034,11 @@ private void ride_end_notify(){
             if (chosen_destination_marker != null)
                 chosen_destination_marker.remove();
             if (FoundDriver_uid != null) {
-                DatabaseReference driver_ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("customerRequest");
+                DatabaseReference driver_ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("customerRequest");
                 if (driver_ref != null)
                     driver_ref.setValue(null);
-                FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("DriversWorking").child(FoundDriver_uid).setValue(null);
-                FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("pickRequest").child(FoundDriver_uid).setValue(null);
+                FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("DriversWorking").child(FoundDriver_uid).setValue(null);
+                FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("pickRequest").child(FoundDriver_uid).setValue(null);
                 FoundDriver_uid = null;
             }
             if (driver_ref != null && driver_listener != null)
@@ -1049,16 +1049,16 @@ private void ride_end_notify(){
                 driver_loc_marker.remove();
             if (pickup_point_marker != null)
                 pickup_point_marker.remove();
-            DatabaseReference reference = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference("CustomerRequest");
+            DatabaseReference reference = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference("CustomerRequest");
             GeoFire geofire = new GeoFire(reference);
             geofire.removeLocation(userid, new GeoFire.CompletionListener() {
                 @Override
                 public void onComplete(String key, DatabaseError error) {
                 }
             });
-            FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders").child(userid).child("CurrentRequest").setValue(null);
-            FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders").child(userid).child("ongoingRequest").setValue(null);
-            FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Riders").child(userid).child("ongoingRide").setValue(null);
+            FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Riders").child(userid).child("CurrentRequest").setValue(null);
+            FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Riders").child(userid).child("ongoingRequest").setValue(null);
+            FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Riders").child(userid).child("ongoingRide").setValue(null);
             dest_text.setText("Where to?");
             ride_request_progress_layout.setVisibility(View.INVISIBLE);
             map_marker_pickup_point.setVisibility(View.INVISIBLE);
@@ -1076,7 +1076,7 @@ private void ride_end_notify(){
 
     private void getDriverInfo() {
         if (FoundDriver_uid != null) {
-            DatabaseReference customer_Ref = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Users").child("Drivers").child(FoundDriver_uid);
+            DatabaseReference customer_Ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference("Users").child("Drivers").child(FoundDriver_uid);
             customer_Ref.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -1204,7 +1204,7 @@ private void ride_end_notify(){
                     .withListener(this)
                     .alternativeRoutes(false)
                     .waypoints(new LatLng(mlocation.getLatitude(), mlocation.getLongitude()), customer_lat_lng)
-                    .key("AIzaSyDhwZjpwoi5aX3XwxkbVyLzdHbyT-6KcOw")
+                    .key(firebase_google_keys_ids.google_maps_api_key)
                     .build();
             routing.execute();
         }
@@ -1217,7 +1217,7 @@ private void ride_end_notify(){
                     .withListener(this)
                     .alternativeRoutes(false)
                     .waypoints(new LatLng(mlocation.getLatitude(), mlocation.getLongitude()), customer_lat_lng)
-                    .key("AIzaSyDhwZjpwoi5aX3XwxkbVyLzdHbyT-6KcOw")
+                    .key(firebase_google_keys_ids.google_maps_api_key)
                     .build();
             routing.execute();
         }
@@ -1306,8 +1306,8 @@ private void ride_end_notify(){
 
     private void send_music_play_request(String song_url) {
         if (ongoing_Ride && FoundDriver_uid != null) {
-            FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("playsong").setValue(song_url);
-            FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("pausesong").setValue(null);
+            FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("playsong").setValue(song_url);
+            FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("pausesong").setValue(null);
         }
     }
 
@@ -1317,8 +1317,8 @@ private void ride_end_notify(){
 
     private void send_music_pause_request() {
         if (ongoing_Ride && FoundDriver_uid != null) {
-            FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("playsong").setValue(null);
-            FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("pausesong").setValue(true);
+            FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("playsong").setValue(null);
+            FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("pausesong").setValue(true);
         }
     }
 

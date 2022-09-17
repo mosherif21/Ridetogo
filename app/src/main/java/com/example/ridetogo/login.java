@@ -112,7 +112,7 @@ public class login extends AppCompatActivity {
                             hideSoftKeyboard(login.this);
                             String full_phone_no = "+" + country_code.getFullNumber();
                             //check if entered number already used by driver
-                            FirebaseDatabase database = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/");
+                            FirebaseDatabase database = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path);
                             Query checkuser_exists = database.getReference("Users").child("Drivers").orderByChild("Phone").equalTo(full_phone_no.trim());
                             checkuser_exists.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
@@ -202,8 +202,6 @@ public class login extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        progressBar.setVisibility(View.INVISIBLE);
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         googleSignInClient.signOut();
     }
 
@@ -217,6 +215,10 @@ public class login extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == google_sign_in_Requestcode) {
             Task<GoogleSignInAccount> google_Account_task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            if(!google_Account_task.isSuccessful()){
+                progressBar.setVisibility(View.INVISIBLE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
             try {
                 GoogleSignInAccount google_account = google_Account_task.getResult(ApiException.class);
                 AuthCredential credential = GoogleAuthProvider.getCredential(google_account.getIdToken(), null);
@@ -225,43 +227,38 @@ public class login extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    progressBar.setVisibility(View.INVISIBLE);
-                                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                     String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-                                    FirebaseDatabase database = FirebaseDatabase.getInstance("https://ridetogo-dcf8e-default-rtdb.europe-west1.firebasedatabase.app/");
+                                    FirebaseDatabase database = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path);
                                     Query checkuser_exists = database.getReference("Users").child("Drivers").orderByChild("Email").equalTo(email);
                                     checkuser_exists.addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                                             //if exists go to login activity
                                             if (snapshot.exists()) {
-                                                progressBar.setVisibility(View.INVISIBLE);
-                                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                 Intent intent = new Intent(login.this, driver_MapsActivity.class);
                                                 startActivity(intent);
-
+                                                progressBar.setVisibility(View.INVISIBLE);
+                                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                             } else {
                                                 //check if entered number already used by rider
                                                 Query checkuser_exists = database.getReference("Users").child("Riders").orderByChild("Email").equalTo(email);
                                                 checkuser_exists.addListenerForSingleValueEvent(new ValueEventListener() {
                                                     @Override
                                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                        progressBar.setVisibility(View.INVISIBLE);
-                                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                         if (snapshot.exists()) {
                                                             //if exists go to login activity
-                                                            progressBar.setVisibility(View.INVISIBLE);
-                                                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                             Intent intent = new Intent(login.this, home.class);
                                                             startActivity(intent);
-                                                        } else {
-                                                            //if number is not registered then go to otp verification activity
                                                             progressBar.setVisibility(View.INVISIBLE);
                                                             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                        } else {
+                                                            //if number is not registered then go to otp verification activity
                                                             Intent intent = new Intent(login.this, phone_otp_Enter.class);
                                                             intent.putExtra("driver", "no");
                                                             intent.putExtra("loginORsignupORother", "google_signup");
                                                             startActivity(intent);
+                                                            progressBar.setVisibility(View.INVISIBLE);
+                                                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                         }
                                                     }
 

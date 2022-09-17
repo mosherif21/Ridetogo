@@ -6,6 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".phone_otp_Enter">
 
+    <ProgressBar
+        android:id="@+id/phone_otp_enter_progressbar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/circle_white"
+        android:elevation="10dp"
+        android:padding="10dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.461" />
+
     <TextView
         android:id="@+id/textView47"
         style="@android:style/TextAppearance.DeviceDefault.Large"
@@ -45,7 +60,7 @@
         android:id="@+id/btn_phone_otp_login"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="28dp"
         android:backgroundTint="#7A7979"
         android:text="CONTINUE"
         android:textStyle="bold"
@@ -60,11 +75,12 @@
         android:id="@+id/phone_number_phone"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="512dp"
+        android:layout_marginBottom="472dp"
         android:background="@drawable/custom_input"
         android:drawableStart="@drawable/ic_phone"
         android:drawablePadding="10dp"
         android:hint="Enter your phone"
+        android:inputType="numberSigned"
         android:paddingStart="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="6:1"
@@ -72,7 +88,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline81"
         app:layout_constraintTop_toBottomOf="@+id/countryCodePicker_phone_otp"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.594" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline82"
