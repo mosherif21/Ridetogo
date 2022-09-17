@@ -72,7 +72,7 @@ public class phone_otp_Enter extends AppCompatActivity {
                                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             progressBar.setVisibility(View.VISIBLE);
                             String full_phone_no = "+" + country_code.getFullNumber();
-                            FirebaseDatabase database = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path);
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
                             Query checkuser_exists = database.getReference("Users").child("Drivers").orderByChild("Phone").equalTo(full_phone_no);
                             checkuser_exists.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
@@ -101,7 +101,7 @@ public class phone_otp_Enter extends AppCompatActivity {
                                                     intent.putExtra("phone_no", full_phone_no);
                                                     intent.putExtra("loginORsignupORother", signORloginORother);
                                                     intent.putExtra("driver", isdriver);
-                                                    startActivity(intent);
+                                                    startActivityForResult(intent, 20);
                                                     progressBar.setVisibility(View.INVISIBLE);
                                                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                 }
@@ -134,6 +134,17 @@ public class phone_otp_Enter extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 20) {
+            if(resultCode == RESULT_OK) {
+                String finish_Get = data.getStringExtra("request_finish");
+                if(finish_Get.equals("finish"))
+                    finish();
+            }
+        }
+    }
     @Override
     protected void onResume() {
         super.onResume();

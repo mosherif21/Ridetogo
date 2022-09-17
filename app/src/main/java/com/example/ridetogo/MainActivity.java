@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             //check if the user logged in is a driver or a rider and launch the corresponding activity
-            Query checkuser_exists = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).
+            Query checkuser_exists = FirebaseDatabase.getInstance().
                     getReference("Users").child("Riders").orderByChild("Phone").equalTo(user.getPhoneNumber());
             checkuser_exists.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override

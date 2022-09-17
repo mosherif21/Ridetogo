@@ -40,7 +40,7 @@ public class change_name_activity_setttings extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                customer_Ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference("Users").child("Riders").child(userid);
+                customer_Ref = FirebaseDatabase.getInstance().getReference("Users").child("Riders").child(userid);
                 customer_Ref.child("Name").setValue(name.getText().toString().trim());
                 finish();
             }

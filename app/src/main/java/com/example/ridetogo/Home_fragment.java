@@ -70,6 +70,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.annotations.NotNull;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.io.IOException;
@@ -443,7 +444,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
             search_driver_anim.setVisibility(View.VISIBLE);
             ride_request_progress_txt.setText("Finding your driver....");
 
-            DatabaseReference ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference("CustomerRequest");
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("CustomerRequest");
             geofire = new GeoFire(ref);
             geofire.setLocation(userid, new GeoLocation(confirmed_pickup_latlng.latitude, confirmed_pickup_latlng.longitude), new GeoFire.CompletionListener() {
                 @Override
@@ -455,7 +456,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
                     }
                 }
             });
-            ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Riders").child(userid).child("CurrentRequest");
+            ref = FirebaseDatabase.getInstance().getReference().child("Users").child("Riders").child(userid).child("CurrentRequest");
             HashMap datamap = new HashMap();
             datamap.put("ride_Class", ride_class);
             if (destination_of_ride_request_chosen_name.equals(""))
@@ -470,18 +471,18 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
         }
 
     }
-
+    GeoQueryEventListener GeoQueryEventListener_var;
     private void findClosestDriver(String ride_class, LatLng pickup_latlng_search) {
-        DatabaseReference ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference("AvailableDrivers");
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("AvailableDrivers");
         geofire = new GeoFire(ref);
         geoQuery1 = geofire.queryAtLocation(new GeoLocation(pickup_latlng_search.latitude, pickup_latlng_search.longitude), radius);
-        geoQuery1.addGeoQueryEventListener(new GeoQueryEventListener() {
+        geoQuery1.addGeoQueryEventListener(GeoQueryEventListener_var=new GeoQueryEventListener() {
             @Override
             public void onKeyEntered(String key, GeoLocation location) {
                 if (!FoundDriver && request_bol) {
                     FoundDriver_uid = key;
                     geoQuery1.removeAllListeners();
-                    Query query1 = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("wasalnyClass");
+                    Query query1 = FirebaseDatabase.getInstance().getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("wasalnyClass");
                     query1.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -530,14 +531,14 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
     }
 
     private void check_ongoing_ride() {
-        DatabaseReference ongoing_Req_ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Riders").child(userid).child("ongoingRide");
+        DatabaseReference ongoing_Req_ref = FirebaseDatabase.getInstance().getReference().child("Users").child("Riders").child(userid).child("ongoingRide");
         ongoing_Req_ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     FoundDriver_uid = snapshot.getValue(String.class);
                     locations_rideDetails_layout.setVisibility(View.INVISIBLE);
-                    DatabaseReference ongoing_request_Ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference()
+                    DatabaseReference ongoing_request_Ref = FirebaseDatabase.getInstance().getReference()
                             .child("Users").child("Drivers").child(FoundDriver_uid).child("customerRequest");
                     ongoing_request_Ref.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -559,7 +560,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
                                     destination_lng = Double.parseDouble(datamap.get("destination_lng").toString());
                                 }
                                 destination_location_latlng = new LatLng(destination_lat, destination_lng);
-                                DatabaseReference pickup_point_Ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("CustomerRequest").child(userid).child("l");
+                                DatabaseReference pickup_point_Ref = FirebaseDatabase.getInstance().getReference().child("CustomerRequest").child(userid).child("l");
                                 pickup_point_Ref.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -606,14 +607,14 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
     }
 
     private void check_ongoing_request() {
-        DatabaseReference ongoing_Req_ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Riders").child(userid).child("ongoingRequest");
+        DatabaseReference ongoing_Req_ref = FirebaseDatabase.getInstance().getReference().child("Users").child("Riders").child(userid).child("ongoingRequest");
         ongoing_Req_ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     //JToast.makeText((getActivity()), "ongoing request detected", JToast.LENGTH_SHORT).show();
                     FoundDriver_uid = snapshot.getValue().toString();
-                    DatabaseReference ongoing_request_Ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference()
+                    DatabaseReference ongoing_request_Ref = FirebaseDatabase.getInstance().getReference()
                             .child("Users").child("Drivers").child(FoundDriver_uid).child("customerRequest");
                     ongoing_request_Ref.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -635,7 +636,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
                                     destination_lng = Double.parseDouble(datamap.get("destination_lng").toString());
                                 }
                                 destination_location_latlng = new LatLng(destination_lat, destination_lng);
-                                DatabaseReference pickup_point_Ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("CustomerRequest").child(userid).child("l");
+                                DatabaseReference pickup_point_Ref = FirebaseDatabase.getInstance().getReference().child("CustomerRequest").child(userid).child("l");
                                 pickup_point_Ref.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -686,7 +687,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
     }
 
     private void check_made_Request() {
-        DatabaseReference made_request_ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Riders").child(userid).child("CurrentRequest");
+        DatabaseReference made_request_ref = FirebaseDatabase.getInstance().getReference().child("Users").child("Riders").child(userid).child("CurrentRequest");
         made_request_ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -710,7 +711,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
                     }
                     destination_location_latlng = new LatLng(destination_lat, destination_lng);
 
-                    DatabaseReference customer_req_ref_loc = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("CustomerRequest").child(userid).child("l");
+                    DatabaseReference customer_req_ref_loc = FirebaseDatabase.getInstance().getReference().child("CustomerRequest").child(userid).child("l");
                     customer_req_ref_loc.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -752,10 +753,15 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
     }
 
     private void driver_found_action() {
+        try{
+            geoQuery1.removeGeoQueryEventListener(GeoQueryEventListener_var);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         FoundDriver = true;
         if (FoundDriver_uid != null) {
-
-            DatabaseReference driverRef = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference()
+            DatabaseReference driverRef = FirebaseDatabase.getInstance().getReference()
                     .child("Users").child("Drivers").child(FoundDriver_uid).child("customerRequest");
             HashMap datamap = new HashMap();
             datamap.put("CustomerRideId", cust_id);
@@ -768,8 +774,8 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
             datamap.put("destination_lng", destination_location_latlng.longitude);
             driverRef.updateChildren(datamap);
             ride_request_progress_txt.setText("Finding your driver's location");
-            FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Riders").child(userid).child("CurrentRequest").setValue(null);
-            FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Riders").child(userid).child("ongoingRequest").setValue(FoundDriver_uid);
+            FirebaseDatabase.getInstance().getReference().child("Users").child("Riders").child(userid).child("CurrentRequest").setValue(null);
+            FirebaseDatabase.getInstance().getReference().child("Users").child("Riders").child(userid).child("ongoingRequest").setValue(FoundDriver_uid);
             getDriverLocation();
             getHasRideEnded();
             getDriverInfo();
@@ -781,7 +787,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
 
     private void getdriverAskPick(String driverid) {
 
-        DatabaseReference reference = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("pickRequest").child(driverid).child("pickCustomer");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("pickRequest").child(driverid).child("pickCustomer");
         if (listener_pickup != null)
             reference.removeEventListener(listener_pickup);
         listener_pickup = reference.addValueEventListener(new ValueEventListener() {
@@ -840,8 +846,8 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
         ongoing_Ride = true;
         routePickupOrpickuppoint = 3;
         if (FoundDriver_uid != null)
-            FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Riders").child(userid).child("ongoingRide").setValue(FoundDriver_uid);
-        FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Riders").child(userid).child("ongoingRequest").setValue(null);
+            FirebaseDatabase.getInstance().getReference().child("Users").child("Riders").child(userid).child("ongoingRide").setValue(FoundDriver_uid);
+        FirebaseDatabase.getInstance().getReference().child("Users").child("Riders").child(userid).child("ongoingRequest").setValue(null);
         if (destination_location_latlng.latitude != 0 && destination_location_latlng.longitude != 0) {
             chosen_destination_marker = mymap.addMarker(new MarkerOptions().position((destination_location_latlng)).title(destination_of_ride_request_chosen_name).icon(BitmapDescriptorFactory.fromResource(R.drawable.destination_flag_small)));
             getRouteToMarker2(destination_location_latlng);
@@ -856,7 +862,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
     }
 
     private void getDriverLocation() {
-        driver_loc = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("DriversWorking").child(FoundDriver_uid).child("l");
+        driver_loc = FirebaseDatabase.getInstance().getReference().child("DriversWorking").child(FoundDriver_uid).child("l");
         driver_locListener = driver_loc.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -969,7 +975,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
         }
     }
 private void ride_end_notify(){
-    DatabaseReference reference = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Ride_end_notify").child(userid).child("price");
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Ride_end_notify").child(userid).child("price");
     listener = reference.addValueEventListener(new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -1000,7 +1006,7 @@ private void ride_end_notify(){
     });
 }
     private void getHasRideEnded() {
-        driver_ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("customerRequest");
+        driver_ref = FirebaseDatabase.getInstance().getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("customerRequest");
         driver_listener = driver_ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -1034,11 +1040,11 @@ private void ride_end_notify(){
             if (chosen_destination_marker != null)
                 chosen_destination_marker.remove();
             if (FoundDriver_uid != null) {
-                DatabaseReference driver_ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("customerRequest");
+                DatabaseReference driver_ref = FirebaseDatabase.getInstance().getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("customerRequest");
                 if (driver_ref != null)
                     driver_ref.setValue(null);
-                FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("DriversWorking").child(FoundDriver_uid).setValue(null);
-                FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("pickRequest").child(FoundDriver_uid).setValue(null);
+                FirebaseDatabase.getInstance().getReference().child("DriversWorking").child(FoundDriver_uid).setValue(null);
+                FirebaseDatabase.getInstance().getReference().child("pickRequest").child(FoundDriver_uid).setValue(null);
                 FoundDriver_uid = null;
             }
             if (driver_ref != null && driver_listener != null)
@@ -1049,16 +1055,16 @@ private void ride_end_notify(){
                 driver_loc_marker.remove();
             if (pickup_point_marker != null)
                 pickup_point_marker.remove();
-            DatabaseReference reference = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference("CustomerRequest");
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("CustomerRequest");
             GeoFire geofire = new GeoFire(reference);
             geofire.removeLocation(userid, new GeoFire.CompletionListener() {
                 @Override
                 public void onComplete(String key, DatabaseError error) {
                 }
             });
-            FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Riders").child(userid).child("CurrentRequest").setValue(null);
-            FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Riders").child(userid).child("ongoingRequest").setValue(null);
-            FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Riders").child(userid).child("ongoingRide").setValue(null);
+            FirebaseDatabase.getInstance().getReference().child("Users").child("Riders").child(userid).child("CurrentRequest").setValue(null);
+            FirebaseDatabase.getInstance().getReference().child("Users").child("Riders").child(userid).child("ongoingRequest").setValue(null);
+            FirebaseDatabase.getInstance().getReference().child("Users").child("Riders").child(userid).child("ongoingRide").setValue(null);
             dest_text.setText("Where to?");
             ride_request_progress_layout.setVisibility(View.INVISIBLE);
             map_marker_pickup_point.setVisibility(View.INVISIBLE);
@@ -1076,7 +1082,7 @@ private void ride_end_notify(){
 
     private void getDriverInfo() {
         if (FoundDriver_uid != null) {
-            DatabaseReference customer_Ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference("Users").child("Drivers").child(FoundDriver_uid);
+            DatabaseReference customer_Ref = FirebaseDatabase.getInstance().getReference("Users").child("Drivers").child(FoundDriver_uid);
             customer_Ref.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -1133,6 +1139,133 @@ private void ride_end_notify(){
         }
     }
 
+    private boolean getDriversAroundStarted = false;
+    private List<Marker> markerList = new ArrayList<Marker>();
+
+    /**
+     * Displays drivers around the user's current
+     * location and updates them in real time.
+     */
+    private void getDriversAround() {
+        if (mlocation == null) {
+            return;
+        }
+        getDriversAroundStarted = true;
+        DatabaseReference driversLocation = FirebaseDatabase.getInstance().getReference("AvailableDrivers");
+        GeoFire geoFire = new GeoFire(driversLocation);
+        int radius=20;
+        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(mlocation.getLatitude(), mlocation.getLongitude()), radius);
+        geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
+            @Override
+            public void onKeyEntered(String key, GeoLocation location) {
+                JToast.makeText(getActivity(),"ahhhhh",JToast.LENGTH_SHORT).show();
+                if (FoundDriver_uid != null) {
+                    return;
+                }
+
+                for (Marker markerIt : markerList) {
+                    if (markerIt.getTag() == null || key == null) {
+                        continue;
+                    }
+                    if (markerIt.getTag().equals(key))
+                        return;
+                }
+
+                checkDriverLastUpdated(key);
+
+                LatLng driverLocation = new LatLng(location.latitude, location.longitude);
+                Marker mDriverMarker = mymap.addMarker(new MarkerOptions().position((driverLocation)).title(key).icon(BitmapDescriptorFactory.fromResource(R.drawable.car_small)));
+                mDriverMarker.setTag(key);
+                markerList.add(mDriverMarker);
+
+            }
+
+            @Override
+            public void onKeyExited(String key) {
+
+                for (Marker markerIt : markerList) {
+                    if (markerIt.getTag() == null || key == null) {
+                        continue;
+                    }
+                    if (markerIt.getTag().equals(key)) {
+                        markerIt.remove();
+                        markerList.remove(markerIt);
+                        return;
+                    }
+
+                }
+            }
+
+            @Override
+            public void onKeyMoved(String key, GeoLocation location) {
+
+                for (Marker markerIt : markerList) {
+                    if (markerIt.getTag() == null || key == null) {
+                        continue;
+                    }
+                    if (markerIt.getTag().equals(key)) {
+                        markerIt.setPosition(new LatLng(location.latitude, location.longitude));
+                        return;
+                    }
+                }
+
+                checkDriverLastUpdated(key);
+                LatLng driverLocation = new LatLng(location.latitude, location.longitude);
+
+                Marker mDriverMarker = mymap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.car_small)).position(driverLocation).title(key));
+                mDriverMarker.setTag(key);
+
+                markerList.add(mDriverMarker);
+            }
+
+            @Override
+            public void onGeoQueryReady() {
+
+            }
+
+            @Override
+            public void onGeoQueryError(DatabaseError error) {
+
+            }
+        });
+    }
+    /**
+     * Checks if driver has not been updated in a while, if it has been more than x time
+     * since the driver location was last updated then remove it from the database.
+     *
+     * @param key - id of the driver
+     */
+    private void checkDriverLastUpdated(String key) {
+        FirebaseDatabase.getInstance().getReference()
+                .child("Users")
+                .child("Drivers")
+                .child(key)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
+                        if (!dataSnapshot.exists()) {
+                            return;
+                        }
+
+                        if (dataSnapshot.child("last_updated").getValue() != null) {
+                            long lastUpdated = Long.parseLong(dataSnapshot.child("last_updated").getValue().toString());
+                            long currentTimestamp = System.currentTimeMillis();
+
+                            if (currentTimestamp - lastUpdated > 10000) {
+                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("driversWorking");
+                                GeoFire geoFire = new GeoFire(ref);
+                                geoFire.removeLocation(dataSnapshot.getKey(), (key1, error) -> {
+                                });
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NotNull DatabaseError databaseError) {
+                    }
+                });
+    }
+
     @Override
     public void onLocationChanged(@NonNull Location location) {
         mlocation = location;
@@ -1143,6 +1276,10 @@ private void ride_end_notify(){
             mymap.animateCamera(CameraUpdateFactory.zoomTo(17), 1000, null);
         }
         btn_whereto.setClickable(true);
+        if(!getDriversAroundStarted){
+            getDriversAround();
+        }
+
     }
 
     protected synchronized void setGoogleApiClient() {
@@ -1157,20 +1294,21 @@ private void ride_end_notify(){
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mymap = googleMap;
-        //  Boolean isNight;
-        //  Calendar cal = Calendar.getInstance();
-        //   int hour = cal.get(Calendar.HOUR_OF_DAY);
-        //  if (hour < 6 || hour > 18) {
-        //      isNight = true;
-        //  } else {
-        //      isNight = false;
-        //  }
-        //  if (isNight) {
-        //      googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.night_mode));
-        //      map_marker.setAnimation(R.raw.map_marker_night);
-        //  } else {
+        /*  Boolean isNight;
+          Calendar cal = Calendar.getInstance();
+           int hour = cal.get(Calendar.HOUR_OF_DAY);
+          if (hour < 6 || hour > 18) {
+              isNight = true;
+          } else {
+             isNight = false;
+         }
+          if (isNight) {
+              googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.night_mode));
+            map_marker.setAnimation(R.raw.map_marker_night);
+          } else {
+
+          }*/
         googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.day_mode));
-        //  }
 
         if (ActivityCompat.checkSelfPermission((getActivity()).getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission((getActivity()).getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
             return;
@@ -1306,8 +1444,8 @@ private void ride_end_notify(){
 
     private void send_music_play_request(String song_url) {
         if (ongoing_Ride && FoundDriver_uid != null) {
-            FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("playsong").setValue(song_url);
-            FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("pausesong").setValue(null);
+            FirebaseDatabase.getInstance().getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("playsong").setValue(song_url);
+            FirebaseDatabase.getInstance().getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("pausesong").setValue(null);
         }
     }
 
@@ -1317,8 +1455,8 @@ private void ride_end_notify(){
 
     private void send_music_pause_request() {
         if (ongoing_Ride && FoundDriver_uid != null) {
-            FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("playsong").setValue(null);
-            FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("pausesong").setValue(true);
+            FirebaseDatabase.getInstance().getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("playsong").setValue(null);
+            FirebaseDatabase.getInstance().getReference().child("Users").child("Drivers").child(FoundDriver_uid).child("pausesong").setValue(true);
         }
     }
 

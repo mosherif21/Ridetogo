@@ -94,7 +94,7 @@ public class signup extends AppCompatActivity {
                 }
                 if (name_confirm && pass_confirm && email_confirm) {
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    DatabaseReference ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Riders")
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Users").child("Riders")
                             .child(user.getUid());
                     ref.child("Name").setValue(name);
                     ref.child("Email").setValue(email);

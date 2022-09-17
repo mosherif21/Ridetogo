@@ -72,7 +72,7 @@ public class change_email_activity extends AppCompatActivity {
                                         } else {
                                             //email_error.setVisibility(View.INVISIBLE);
                                             userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                                            customer_Ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference("Users").child("Riders").child(userid);
+                                            customer_Ref = FirebaseDatabase.getInstance().getReference("Users").child("Riders").child(userid);
                                             customer_Ref.child("Email").setValue(email_editor.getText().toString().trim());
                                             finish();
                                         }

@@ -12,7 +12,6 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,6 +28,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -61,6 +61,7 @@ public class settings_fragment extends Fragment {
     private DatabaseReference customer_Ref;
     private LinearLayout layout_profileImage;
     private LinearLayout layout_name;
+    private LinearLayout layout_phone;
     private LinearLayout layout_email;
     private LinearLayout layout_password;
     private ProgressBar progressBar;
@@ -77,9 +78,10 @@ public class settings_fragment extends Fragment {
         phone_num_text = v.findViewById(R.id.settings_phone_num_txt);
         user_image = v.findViewById(R.id.settings_user_image);
         progressBar = v.findViewById(R.id.account_Settings_progressbar);
+        layout_phone = v.findViewById(R.id.settings_Phone_number);
         user = FirebaseAuth.getInstance().getCurrentUser();
         userid = user.getUid();
-        customer_Ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference("Users").child("Riders").child(userid);
+        customer_Ref = FirebaseDatabase.getInstance().getReference("Users").child("Riders").child(userid);
         getuserinfo();
         btn_signout = v.findViewById(R.id.btn_signout);
         layout_profileImage = v.findViewById(R.id.settings_profile_picture);
@@ -89,22 +91,6 @@ public class settings_fragment extends Fragment {
         email_verify_text = v.findViewById(R.id.email_verified_text);
         btn_verify_email = v.findViewById(R.id.btn_verify_email);
 
-        btn_verify_email.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                user.sendEmailVerification()
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    btn_verify_email.setText("email sent");
-                                    btn_verify_email.setClickable(false);
-                                }
-                            }
-                        });
-            }
-
-        });
         layout_profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,20 +109,12 @@ public class settings_fragment extends Fragment {
                 ((home) getActivity()).overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
             }
         });
-        layout_email.setOnClickListener(new View.OnClickListener() {
+        layout_phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(((home) getActivity()), change_email_activity.class);
-                if (!email.isEmpty())
-                    intent.putExtra("user_email", email);
-                startActivity(intent);
-                ((home) getActivity()).overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
-            }
-        });
-        layout_password.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(((home) getActivity()), password_change_activity.class);
+                Intent intent = new Intent(((home) getActivity()), phone_otp_Enter.class);
+                intent.putExtra("loginORsignupORother", "password_change");
+                intent.putExtra("driver", "no");
                 startActivity(intent);
                 ((home) getActivity()).overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
             }
@@ -168,22 +146,66 @@ public class settings_fragment extends Fragment {
     }
 
     private void getverifyEmail() {
-        if (user.isEmailVerified()) {
-            btn_verify_email.setVisibility(View.INVISIBLE);
-            email_verify_text.setText("Verified");
-            email_verify_text.setTextColor(Color.parseColor("#4CAF50"));
-            //JToast.makeText(((home)getActivity()), "verified", JToast.LENGTH_SHORT).show();
-        } else {
-            btn_verify_email.setVisibility(View.VISIBLE);
-            email_verify_text.setText("Not verified");
-            email_verify_text.setTextColor(Color.RED);
-            //JToast.makeText(((home)getActivity()), "not verified", JToast.LENGTH_SHORT).show();
+        Boolean google_email = false;
+        String google_email_string;
+        for (UserInfo profile : user.getProviderData()) {
+            google_email_string = profile.getProviderId().trim();
+            if (google_email_string.equals("google.com")) {
+                google_email = true;
+            }
+            if (user.isEmailVerified()) {
+                btn_verify_email.setVisibility(View.INVISIBLE);
+                email_verify_text.setText("Verified");
+                email_verify_text.setTextColor(Color.parseColor("#4CAF50"));
+                //JToast.makeText(((home)getActivity()), "verified", JToast.LENGTH_SHORT).show();
+            } else {
+                btn_verify_email.setVisibility(View.VISIBLE);
+                email_verify_text.setText("Not verified");
+                email_verify_text.setTextColor(Color.RED);
+                //JToast.makeText(((home)getActivity()), "not verified", JToast.LENGTH_SHORT).show();
+            }
+        }
+        if (google_email != true) {
+            layout_email.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(((home) getActivity()), change_email_activity.class);
+                    if (!email.isEmpty())
+                        intent.putExtra("user_email", email);
+                    startActivity(intent);
+                    ((home) getActivity()).overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+                }
+            });
+            layout_password.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(((home) getActivity()), password_change_activity.class);
+                    startActivity(intent);
+                    ((home) getActivity()).overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+                }
+            });
+            btn_verify_email.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    user.sendEmailVerification()
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        btn_verify_email.setText("email sent");
+                                        btn_verify_email.setClickable(false);
+                                    }
+                                }
+                            });
+                }
+            });
         }
     }
 
+
     private void getuserinfo() {
         progressBar.setVisibility(View.VISIBLE);
-       // getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        // getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         customer_Ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -204,7 +226,7 @@ public class settings_fragment extends Fragment {
                         String image_profileurl = datamap.get("profile_image").toString();
                         Glide.with(((home) getActivity())).load(image_profileurl).into(user_image);
                     }
-                  //  getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    //  getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     progressBar.setVisibility(View.INVISIBLE);
                 }
             }

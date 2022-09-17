@@ -94,7 +94,7 @@ public class RideHistoryPreview extends AppCompatActivity implements OnMapReadyC
         rideId = getIntent().getStringExtra("rideId");
 
         //get ride reference from database using ride id
-        history_ref = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("RidesHistory").child(rideId);
+        history_ref = FirebaseDatabase.getInstance().getReference().child("RidesHistory").child(rideId);
 
         //call ride history info function
         getRideHistoryInfo();
@@ -172,7 +172,7 @@ public class RideHistoryPreview extends AppCompatActivity implements OnMapReadyC
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 //update ride rating using history reference
                 history_ref.child("rating").setValue(rating);
-                DatabaseReference reference = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Drivers").child(driverId);
+                DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Users").child("Drivers").child(driverId);
                 reference.child("rating").child(rideId).setValue(rating);
             }
         });
@@ -181,7 +181,7 @@ public class RideHistoryPreview extends AppCompatActivity implements OnMapReadyC
     //driver info function
     private void DriverInfo(String aDriverId) {
         //get driver reference using driver id
-        DatabaseReference reference = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Drivers").child(aDriverId);
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Users").child("Drivers").child(aDriverId);
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

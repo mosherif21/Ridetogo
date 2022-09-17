@@ -69,7 +69,7 @@ public class rides_history extends Fragment {
     private void getRideHistory() {
         //get user id and use it to get if user has ride history entry
         String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference reference = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("Users").child("Riders").child(userid).child("ride_history");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Users").child("Riders").child(userid).child("ride_history");
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -94,7 +94,7 @@ public class rides_history extends Fragment {
 
     //fetch each ride info using ride history reference key
     private void FetchRideInformation(String key) {
-        DatabaseReference reference = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path).getReference().child("RidesHistory").child(key);
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("RidesHistory").child(key);
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

@@ -112,7 +112,7 @@ public class login extends AppCompatActivity {
                             hideSoftKeyboard(login.this);
                             String full_phone_no = "+" + country_code.getFullNumber();
                             //check if entered number already used by driver
-                            FirebaseDatabase database = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path);
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
                             Query checkuser_exists = database.getReference("Users").child("Drivers").orderByChild("Phone").equalTo(full_phone_no.trim());
                             checkuser_exists.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
@@ -228,7 +228,7 @@ public class login extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-                                    FirebaseDatabase database = FirebaseDatabase.getInstance(firebase_google_keys_ids.firebase_database_path);
+                                    FirebaseDatabase database = FirebaseDatabase.getInstance();
                                     Query checkuser_exists = database.getReference("Users").child("Drivers").orderByChild("Email").equalTo(email);
                                     checkuser_exists.addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
