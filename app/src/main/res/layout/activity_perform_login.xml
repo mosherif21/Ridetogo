@@ -59,6 +59,7 @@
         android:backgroundTint="@color/black"
         android:text="Login with password"
         android:textStyle="bold"
+        android:visibility="invisible"
         app:cornerRadius="30dp"
         app:layout_constraintDimensionRatio="6:1"
         app:layout_constraintEnd_toStartOf="@+id/guideline80"
