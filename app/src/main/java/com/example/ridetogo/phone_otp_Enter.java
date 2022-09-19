@@ -150,4 +150,10 @@ public class phone_otp_Enter extends AppCompatActivity {
         super.onResume();
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_down, R.anim.slide_down);
+    }
 }
