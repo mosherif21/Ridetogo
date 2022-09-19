@@ -649,6 +649,7 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
         });
         FirebaseDatabase.getInstance().getReference("Users").child("Drivers").child(userid).child("last_updated")
                 .setValue(null);
+
     }
 
     @Override

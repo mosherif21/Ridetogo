@@ -1153,8 +1153,8 @@ private void ride_end_notify(){
         getDriversAroundStarted = true;
         DatabaseReference driversLocation = FirebaseDatabase.getInstance().getReference("AvailableDrivers");
         GeoFire geoFire = new GeoFire(driversLocation);
-        int radius=20;
-        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(mlocation.getLatitude(), mlocation.getLongitude()), radius);
+        int radius_driver=20;
+        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(mlocation.getLatitude(), mlocation.getLongitude()), radius_driver);
         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
             @Override
             public void onKeyEntered(String key, GeoLocation location) {
