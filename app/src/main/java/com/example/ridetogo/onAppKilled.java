@@ -32,14 +32,6 @@ public class onAppKilled extends Service {
 
             }
         });
-        DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference("checkDriverAvailable");
-        GeoFire geofire2 = new GeoFire(ref2);
-        geofire2.removeLocation(userid, new GeoFire.CompletionListener() {
-            @Override
-            public void onComplete(String key, DatabaseError error) {
-            }
-        });
-        FirebaseDatabase.getInstance().getReference("Users").child("Drivers").child(userid).child("last_updated")
-                .setValue(null);
+
     }
 }

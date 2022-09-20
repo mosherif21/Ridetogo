@@ -74,7 +74,6 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
     private GoogleMap mymap;
     private GeoFire geofire_ref_available;
     private GeoFire geofire_ref_working;
-    private GeoFire query_Driver_check;
     private String userid;
     private Button logout;
     private Switch switch_Driver_on_off;
@@ -647,13 +646,7 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
             public void onComplete(String key, DatabaseError error) {
             }
         });
-        query_Driver_check.removeLocation(userid, new GeoFire.CompletionListener() {
-            @Override
-            public void onComplete(String key, DatabaseError error) {
-            }
-        });
-        FirebaseDatabase.getInstance().getReference("Users").child("Drivers").child(userid).child("last_updated")
-                .setValue(null);
+
 
     }
 
@@ -685,9 +678,7 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
             geofire_ref_available = new GeoFire(ref_drivers_available);
             geofire_ref_working = new GeoFire(ref_drivers_working);
 
-            //check driver
-            DatabaseReference ref_Driver_check = FirebaseDatabase.getInstance().getReference("checkDriverAvailable");
-             query_Driver_check = new GeoFire(ref_Driver_check);
+
             if (!assigned_customer_id.equals("")) {
                 geofire_ref_available.removeLocation(userid, new GeoFire.CompletionListener() {
                     @Override
@@ -703,13 +694,7 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
                     }
 
                 });
-                query_Driver_check.removeLocation(userid, new GeoFire.CompletionListener() {
-                    @Override
-                    public void onComplete(String key, DatabaseError error) {
-                        FirebaseDatabase.getInstance().getReference("Users").child("Drivers").child(userid).child("last_updated")
-                                .setValue(null);
-                    }
-                });
+
 
             } else {
                 geofire_ref_working.removeLocation(userid, new GeoFire.CompletionListener() {
@@ -718,15 +703,6 @@ public class driver_MapsActivity extends FragmentActivity implements OnMapReadyC
                     }
                 });
 
-                query_Driver_check.setLocation(userid, new GeoLocation(location.getLatitude(), location.getLongitude()), new GeoFire.CompletionListener() {
-                    @Override
-                    public void onComplete(String key, DatabaseError error) {
-                        if(error==null){
-                            FirebaseDatabase.getInstance().getReference("Users").child("Drivers").child(userid).child("last_updated")
-                                    .setValue(ServerValue.TIMESTAMP);
-                        }
-                    }
-                });
                 geofire_ref_available.setLocation(userid, new GeoLocation(location.getLatitude(), location.getLongitude()), new GeoFire.CompletionListener() {
                     @Override
                     public void onComplete(String key, DatabaseError error) {

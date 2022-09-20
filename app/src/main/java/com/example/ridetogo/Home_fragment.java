@@ -530,6 +530,7 @@ public class Home_fragment extends Fragment implements OnMapReadyCallback, Googl
         });
     }
 
+
     private void check_ongoing_ride() {
         DatabaseReference ongoing_Req_ref = FirebaseDatabase.getInstance().getReference().child("Users").child("Riders").child(userid).child("ongoingRide");
         ongoing_Req_ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -1151,7 +1152,7 @@ private void ride_end_notify(){
             return;
         }
         getDriversAroundStarted = true;
-        DatabaseReference driversLocation = FirebaseDatabase.getInstance().getReference("checkDriverAvailable");
+        DatabaseReference driversLocation = FirebaseDatabase.getInstance().getReference("AvailableDrivers");
         GeoFire geoFire = new GeoFire(driversLocation);
         int radius_driver=20;
         GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(location.latitude, location.longitude), radius_driver);
@@ -1162,7 +1163,7 @@ private void ride_end_notify(){
                 if (FoundDriver_uid != null) {
                     return;
                 }
-                /*
+
                 for (Marker markerIt : markerList) {
                     if (markerIt.getTag() == null || key == null) {
                         continue;
@@ -1177,13 +1178,13 @@ private void ride_end_notify(){
                 Marker mDriverMarker = mymap.addMarker(new MarkerOptions().position((driverLocation)).title(key).icon(BitmapDescriptorFactory.fromResource(R.drawable.car_small)));
                 mDriverMarker.setTag(key);
                 markerList.add(mDriverMarker);
-                */
+
             }
 
             @Override
             public void onKeyExited(String key) {
                 JToast.makeText(getActivity(),"key exited",JToast.LENGTH_SHORT).show();
-                /*
+
                 for (Marker markerIt : markerList) {
                     if (markerIt.getTag() == null || key == null) {
                         continue;
@@ -1194,13 +1195,13 @@ private void ride_end_notify(){
                         return;
                     }
 
-                }*/
+                }
             }
 
             @Override
             public void onKeyMoved(String key, GeoLocation location) {
                 JToast.makeText(getActivity(),"key moved",JToast.LENGTH_SHORT).show();
-                /*
+
                 for (Marker markerIt : markerList) {
                     if (markerIt.getTag() == null || key == null) {
                         continue;
@@ -1217,7 +1218,7 @@ private void ride_end_notify(){
                 Marker mDriverMarker = mymap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.car_small)).position(driverLocation).title(key));
                 mDriverMarker.setTag(key);
 
-                markerList.add(mDriverMarker);*/
+                markerList.add(mDriverMarker);
             }
 
             @Override
@@ -1254,7 +1255,7 @@ private void ride_end_notify(){
                             long currentTimestamp = System.currentTimeMillis();
 
                             if (currentTimestamp - lastUpdated > 10000) {
-                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("checkDriverAvailable");
+                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("AvailableDrivers");
                                 GeoFire geoFire = new GeoFire(ref);
                                 geoFire.removeLocation(dataSnapshot.getKey(), (key1, error) -> {
                                 });
@@ -1278,11 +1279,11 @@ private void ride_end_notify(){
             mymap.animateCamera(CameraUpdateFactory.zoomTo(17), 1000, null);
         }
         btn_whereto.setClickable(true);
-        if(!getDriversAroundStarted){
+     /*   if(!getDriversAroundStarted){
             LatLng check_loc=new LatLng(location.getLatitude(),location.getLongitude());
             getDriversAround(check_loc);
         }
-
+*/
     }
 
     protected synchronized void setGoogleApiClient() {
