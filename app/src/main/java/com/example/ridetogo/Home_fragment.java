@@ -1146,15 +1146,15 @@ private void ride_end_notify(){
      * Displays drivers around the user's current
      * location and updates them in real time.
      */
-    private void getDriversAround() {
+    private void getDriversAround(LatLng location) {
         if (mlocation == null) {
             return;
         }
         getDriversAroundStarted = true;
-        DatabaseReference driversLocation = FirebaseDatabase.getInstance().getReference("AvailableDrivers");
+        DatabaseReference driversLocation = FirebaseDatabase.getInstance().getReference("checkDriverAvailable");
         GeoFire geoFire = new GeoFire(driversLocation);
         int radius_driver=20;
-        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(mlocation.getLatitude(), mlocation.getLongitude()), radius_driver);
+        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(location.latitude, location.longitude), radius_driver);
         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
             @Override
             public void onKeyEntered(String key, GeoLocation location) {
@@ -1162,7 +1162,7 @@ private void ride_end_notify(){
                 if (FoundDriver_uid != null) {
                     return;
                 }
-
+                /*
                 for (Marker markerIt : markerList) {
                     if (markerIt.getTag() == null || key == null) {
                         continue;
@@ -1177,12 +1177,13 @@ private void ride_end_notify(){
                 Marker mDriverMarker = mymap.addMarker(new MarkerOptions().position((driverLocation)).title(key).icon(BitmapDescriptorFactory.fromResource(R.drawable.car_small)));
                 mDriverMarker.setTag(key);
                 markerList.add(mDriverMarker);
-
+                */
             }
 
             @Override
             public void onKeyExited(String key) {
-
+                JToast.makeText(getActivity(),"key exited",JToast.LENGTH_SHORT).show();
+                /*
                 for (Marker markerIt : markerList) {
                     if (markerIt.getTag() == null || key == null) {
                         continue;
@@ -1193,12 +1194,13 @@ private void ride_end_notify(){
                         return;
                     }
 
-                }
+                }*/
             }
 
             @Override
             public void onKeyMoved(String key, GeoLocation location) {
-
+                JToast.makeText(getActivity(),"key moved",JToast.LENGTH_SHORT).show();
+                /*
                 for (Marker markerIt : markerList) {
                     if (markerIt.getTag() == null || key == null) {
                         continue;
@@ -1215,17 +1217,17 @@ private void ride_end_notify(){
                 Marker mDriverMarker = mymap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.car_small)).position(driverLocation).title(key));
                 mDriverMarker.setTag(key);
 
-                markerList.add(mDriverMarker);
+                markerList.add(mDriverMarker);*/
             }
 
             @Override
             public void onGeoQueryReady() {
-
+                JToast.makeText(getActivity(),"queryready",JToast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onGeoQueryError(DatabaseError error) {
-
+                JToast.makeText(getActivity(),"error",JToast.LENGTH_SHORT).show();
             }
         });
     }
@@ -1252,7 +1254,7 @@ private void ride_end_notify(){
                             long currentTimestamp = System.currentTimeMillis();
 
                             if (currentTimestamp - lastUpdated > 10000) {
-                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("driversWorking");
+                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("checkDriverAvailable");
                                 GeoFire geoFire = new GeoFire(ref);
                                 geoFire.removeLocation(dataSnapshot.getKey(), (key1, error) -> {
                                 });
@@ -1277,7 +1279,8 @@ private void ride_end_notify(){
         }
         btn_whereto.setClickable(true);
         if(!getDriversAroundStarted){
-            getDriversAround();
+            LatLng check_loc=new LatLng(location.getLatitude(),location.getLongitude());
+            getDriversAround(check_loc);
         }
 
     }

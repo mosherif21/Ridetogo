@@ -3,6 +3,7 @@ package com.example.ridetogo;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -31,5 +32,14 @@ public class onAppKilled extends Service {
 
             }
         });
+        DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference("checkDriverAvailable");
+        GeoFire geofire2 = new GeoFire(ref2);
+        geofire2.removeLocation(userid, new GeoFire.CompletionListener() {
+            @Override
+            public void onComplete(String key, DatabaseError error) {
+            }
+        });
+        FirebaseDatabase.getInstance().getReference("Users").child("Drivers").child(userid).child("last_updated")
+                .setValue(null);
     }
 }
